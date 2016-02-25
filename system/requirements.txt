@@ -1,0 +1,23 @@
+# Base packages
+Django
+pytz
+
+# database
+psycopg2
+
+# nice forms with bootstrap support
+# django-crispy-forms
+# django-widget-tweaks
+
+# helper mixins
+#django-braces
+
+# send exceptions to Sentry
+# raven
+
+# will be useful some day
+# jsonfield
+
+# work with remote API
+# requests
+# lxml

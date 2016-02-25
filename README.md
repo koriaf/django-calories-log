@@ -7,6 +7,8 @@ Because I hate all existing ones. They are too complex, too slow and too unpleas
 
 ## Developers howto
 
+It uses python3 and latest Django version (I am going to keep it updated).
+
 TODO: how to run project on local machine
 
 ## Devops howto
