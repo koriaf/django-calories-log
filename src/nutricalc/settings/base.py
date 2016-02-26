@@ -49,8 +49,11 @@ INSTALLED_APPS = [
     'nutricalc',
     'nutricalc.food',
     'nutricalc.log',
+    'nutricalc.food_api_v1',
 
     # 3rd party apps
+    'rest_framework',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE_CLASSES = [
