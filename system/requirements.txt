@@ -15,9 +15,12 @@ psycopg2
 # send exceptions to Sentry
 # raven
 
-# will be useful some day
-# jsonfield
+jsonfield
 
 # work with remote API
 # requests
 # lxml
+
+# search API
+djangorestframework
+django-rest-swagger

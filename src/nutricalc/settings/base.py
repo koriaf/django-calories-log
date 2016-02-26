@@ -37,12 +37,20 @@ DEBUG = env("NUTRICALC_DEBUG", default=True)
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    # base django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # local apps
+    'nutricalc',
+    'nutricalc.food',
+    'nutricalc.log',
+
+    # 3rd party apps
 ]
 
 MIDDLEWARE_CLASSES = [
