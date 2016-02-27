@@ -1,7 +1,9 @@
 {
-  "name": "django-nutricalc",
+  "name": "django-calories-log",
   "version": "0.1.0",
   "dependencies": {
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "react": "^0.14.7",
+    "db.js": "^0.10.2"
   }
 }

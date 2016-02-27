@@ -1,0 +1,19 @@
+/* mobile devices by default */
+#log-app-container {
+    padding: 10px;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #log-app-container {
+        padding: 30px;
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
