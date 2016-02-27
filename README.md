@@ -7,9 +7,28 @@ Because I hate all existing ones. They are too complex, too slow and too unpleas
 
 ## Developers howto
 
-It uses python3 and latest Django version (I am going to keep it updated).
+It uses python3 and latest Django version (I am going to keep it updated). Pep8 line length is 120 characters, everything else the same as usual.
 
-TODO: how to run project on local machine
+### How to run project on local machine
+
+Before you start, get used to settings. Check manage.sh for settings provide way and src/nutricalc/settings/base.py for settings read way and full list.
+
+`./venv.sh` - virtualenv will be created and updated. Required for application.
+```
+psql
+create database nutricalc;
+create role nutricalc with password 'nutricalc';
+grant all privileges on database nutricalc to nutricalc;
+```
+
+`./manage.sh validate` - should be no errors
+
+`./manage.sh createsuperuser`
+
+`./runserver.sh` - and navigate to given URL.
+
+Admin panel available at /admin/, api at /api/v1/, api docs at /api/v1/docs/. With admin panel you can add some products for test. 
+
 
 ## Devops howto
 
