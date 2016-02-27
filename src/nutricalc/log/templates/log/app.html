@@ -1,11 +1,19 @@
+{% extends "base.html" %}
 {% comment %}
     Container/initializer for base log application
 {% endcomment %}
 
 {% load static from staticfiles %}
 
-<script src="{% static 'log/logger.page.app.js' %}"></script>
+{% block body %}
+    <div id='log-app-container'>
 
-<div id='div1'>div1</div>
 
-Lalala
+    </div>
+
+    <script src="{% static 'log/logger.page.app.js' %}"></script>
+
+    <div id='div1'>div1</div>
+
+    Lalala
+{% endblock %}
