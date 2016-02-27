@@ -14,6 +14,7 @@ class ProductReadonlyViewSet(ReadOnlyModelViewSet):
         Accepts 'title' GET argument.
         Do search from food database and return partial matches
         """
+        q = self.request.GET.get('title', '').strip()
         return super(ProductReadonlyViewSet, self).get_queryset().filter(
-            title__icontains=self.request.GET.get('title', '').strip()
+            title__icontains=q
         )

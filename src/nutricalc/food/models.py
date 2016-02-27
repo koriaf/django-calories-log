@@ -25,6 +25,7 @@ class Product(models.Model):
 
     class Meta:
         ordering = ('title',)
+        unique_together = ('title', 'source')
 
     def __str__(self):
         return self.title

@@ -28,7 +28,7 @@ def env(name, default):
                 )
     return value
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SECRET_KEY = env('NUTRICALC_SECRET_KEY', default='whocares')
 
