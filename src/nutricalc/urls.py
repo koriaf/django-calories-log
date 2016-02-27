@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(url='/log/'), name='index'),
+    url(r'^log/', include('nutricalc.log.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/', include('nutricalc.food_api_v1.urls')),
     url(r'^api/v1/docs/', include('rest_framework_swagger.urls')),
