@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from nutricalc.food.models import Product
@@ -15,6 +16,16 @@ class ProductReadonlyViewSet(ReadOnlyModelViewSet):
         Do search from food database and return partial matches
         """
         q = self.request.GET.get('title', '').strip()
-        return super(ProductReadonlyViewSet, self).get_queryset().filter(
-            title__icontains=q
+        if not q:
+            return Product.objects.none()
+        words = q.split()
+        qs = Q(title__icontains="")
+        for word in words:
+            if word[0] == '-':
+                qs &= ~Q(title__icontains=word[1:])
+            else:
+                qs &= Q(title__icontains=word)
+        qset = super(ProductReadonlyViewSet, self).get_queryset().filter(
+            qs
         )
+        return qset
