@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     # local apps
     'nutricalc',
     'nutricalc.food',
-    'nutricalc.log',
+    'nutricalc.backlog',
     'nutricalc.food_api_v1',
 
     # 3rd party apps

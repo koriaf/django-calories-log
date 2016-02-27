@@ -1,8 +1,8 @@
 module.exports = {
-    entry: "./src/nutricalc/log/frontend/logger.page/app.js",
+    entry: "./src/nutricalc/backlog/frontend/backlog.app/app.js",
     output: {
         path: __dirname,
-        filename: "./src/nutricalc/log/static/log/logger.page.app.js"
+        filename: "./src/nutricalc/backlog/static/backlog/backlog.app.bundle.js"
     },
     resolve: {
         extensions: ['', '.js', '.jsx']

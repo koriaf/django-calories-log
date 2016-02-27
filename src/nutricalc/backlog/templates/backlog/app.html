@@ -9,7 +9,7 @@
     <script src="/static/bower_components/react/react.js"></script>
     <script src="/static/bower_components/react/react-dom.js"></script>
     <script src="/static/bower_components/db.js/src/db.js"></script>
-    <script src="{% static 'log/logger.page.app.js' %}"></script>
+    <script src="{% static 'backlog/backlog.app.bundle.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -17,18 +17,14 @@
         <div class='row'>
             <div class='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
                 <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-                    <fieldset><legend>Find a product</legend>
-                    <div class="form-group">
-                        <form id='id_search_product_form'>
-                            <div class="input-group">
-                              <input id="id_food_search_input" name="q" class="form-control" value='pr' placeholder="Type desired food here" type="text">
-                              <div class="input-group-btn">
-                                  <button class='btn btn-primary' id="id_food_search_button">Search</button>
-                              </div>
-                            </div>
-                        </form>
-                    </div>
-                    </fieldset>
+                    <form id='id_search_product_form'>
+                        <div class="input-group">
+                          <input id="id_food_search_input" name="q" class="form-control" value='pr' placeholder="Type desired product name here" type="text">
+                          <div class="input-group-btn">
+                              <button class='btn btn-primary' id="id_food_search_button">Search</button>
+                          </div>
+                        </div>
+                    </form>
                 </div>
 
                 <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' id='id_found_food_table_container'>
