@@ -7,7 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
-            'pk',
+            'id',
             'category', 'title', 'description', 'unit', 'language',
             'ccal', 'nutr_prot', 'nutr_carb', 'nutr_fat',
             'source', 'extra_data',

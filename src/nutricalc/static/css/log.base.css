@@ -3,6 +3,31 @@
     padding: 10px;
 }
 
+.food-amount-field {
+  width: 50px;
+  padding: 1px 2px;
+}
+
+#id_found_food_table_container table tr td,
+#id_eaten_food_table_container table tr td {
+  padding: 1px 3px 1px 5px;
+}
+.food-amount-field {
+  padding: 0px 2px;
+  height: auto;
+  border-radius: 0px;
+  border: 1px solid #ccc;
+}
+
+td.righted {
+  text-align: right;
+}
+
+td.bold {
+  font-weight: bold;
+}
+
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 }
