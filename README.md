@@ -5,6 +5,8 @@ Simple app for having your own nutrition diary.
 
 Because I hate all existing ones. They are too complex, too slow and too unpleasant for me. I failed to find anything suits my needs for 100%.
 
+![Image of Yaktocat](docs/backlog.screenshot.png)
+
 ## Developers howto
 
 It uses python3 and latest Django version (I am going to keep it updated). Pep8 line length is 120 characters, everything else the same as usual.
@@ -28,6 +30,8 @@ grant all privileges on database nutricalc to nutricalc;
 `./runserver.sh` - and navigate to given URL.
 
 Admin panel available at /admin/, api at /api/v1/, api docs at /api/v1/docs/. With admin panel you can add some products for test. 
+
+Check out ./dev/ directory for some things to save time.
 
 
 ## Devops howto
