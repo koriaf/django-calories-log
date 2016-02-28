@@ -17,7 +17,6 @@
             BacklogDispatcher.register(function(payload) {
                 if (payload.action === 'renderFoundFood')
                 {
-                    console.log(payload.found_food);
                     table.setState({found_food: payload.found_food})
                 }
             });

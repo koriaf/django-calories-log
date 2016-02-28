@@ -609,10 +609,10 @@
 	                TableComponents.TableBody,
 	                null,
 	                items.map(function (food_row) {
-	                    food_row.ccal = food_row.ccal.toFixed(1);
-	                    food_row.nutr_prot = food_row.nutr_prot.toFixed(1);
-	                    food_row.nutr_fat = food_row.nutr_fat.toFixed(1);
-	                    food_row.nutr_carb = food_row.nutr_carb.toFixed(1);
+	                    food_row.ccal = parseFloat(food_row.ccal).toFixed(1);
+	                    food_row.nutr_prot = parseFloat(food_row.nutr_prot).toFixed(1);
+	                    food_row.nutr_fat = parseFloat(food_row.nutr_fat).toFixed(1);
+	                    food_row.nutr_carb = parseFloat(food_row.nutr_carb).toFixed(1);
 	                    return React.createElement(
 	                        TableComponents.TableRow,
 	                        { key: food_row.id },
@@ -853,7 +853,6 @@
 	            var table = this;
 	            BacklogDispatcher.register(function (payload) {
 	                if (payload.action === 'renderFoundFood') {
-	                    console.log(payload.found_food);
 	                    table.setState({ found_food: payload.found_food });
 	                }
 	            });
