@@ -1,5 +1,5 @@
 (function (){
-
+    'use strict';
     var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
     var TableComponents = require('./base.table');
     var Storage = require('../storage');
@@ -42,7 +42,7 @@
                 this.state.fat += this_fat;
                 this.state.carb += this_carb;
                 this.state.ccal += this_ccal;
-                this.state.mass = this_mass;
+                this.state.mass += this_amount;
             }
             let total_nutr = this.state.prot + this.state.fat + this.state.carb;
             this.state.prot_perc = Math.round(100 * this.state.prot / total_nutr);
@@ -80,26 +80,29 @@
                 }
             });
         }
-        
+
         render() {
+            this.prot_perc_readable = `${this.state.prot_perc}%`;
+            this.fat_perc_readable = `${this.state.fat_perc}%`;
+            this.carb_perc_readable = `${this.state.carb_perc}%`;
             return(
                 <TableComponents.TableHeader className='stat-row'>
                     <TableComponents.TableRow>
-                        <TableComponents.TableCell value="Итого:" className='righted bold'/> 
+                        <TableComponents.TableCell value="Total:" className='righted bold'/>
                         <TableComponents.TableCell value=""/>
                         <TableComponents.TableCell className='righted bold' value={Math.round(this.state.ccal)}/>
                         <TableComponents.TableCell className='righted bold' value={Math.round(this.state.prot)}/> 
                         <TableComponents.TableCell className='righted bold' value={Math.round(this.state.fat)}/>                                                                 
                         <TableComponents.TableCell className='righted bold' value={Math.round(this.state.carb)}/> 
-                        <TableComponents.TableCell className='righted bold' value={Math.round(this.state.mass)}/>
+                        <TableComponents.TableCell className='righted bold'/>
                     </TableComponents.TableRow>
                     <TableComponents.TableRow>
-                        <TableComponents.TableCell value="Проценты:" className='righted bold'/> 
+                        <TableComponents.TableCell value="" className='righted bold'/> 
                         <TableComponents.TableCell value=""/>
                         <TableComponents.TableCell className='righted bold' value=""/>
-                        <TableComponents.TableCell className='righted bold' value={this.state.prot_perc}/> 
-                        <TableComponents.TableCell className='righted bold' value={this.state.fat_perc}/>                                                                 
-                        <TableComponents.TableCell className='righted bold' value={this.state.carb_perc}/> 
+                        <TableComponents.TableCell className='righted bold' value={this.prot_perc_readable}/> 
+                        <TableComponents.TableCell className='righted bold' value={this.fat_perc_readable}/>                                                                 
+                        <TableComponents.TableCell className='righted bold' value={this.carb_perc_readable}/> 
                         <TableComponents.TableCell className='righted bold' value=""/>
                     </TableComponents.TableRow>
                 </TableComponents.TableHeader>

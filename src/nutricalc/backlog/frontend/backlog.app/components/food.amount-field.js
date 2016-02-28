@@ -1,5 +1,5 @@
 (function (){
-
+    'use strict';
     var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
     var Storage = require('../storage');
 
@@ -55,10 +55,12 @@
             this.state.value = new_value;
             BacklogDispatcher.updateFoodAmount(this.food_data);
         },
-        render: function() { 
+        render: function() {
             var value = this.state.value;
             return (
-                <input type="text" className='form-control food-amount-field' value={value} onChange={this.handleTextFieldChange} />
+                <input type="text" className='form-control food-amount-field'
+                    value={value} onChange={this.handleTextFieldChange}
+                />
             );
         }
     });

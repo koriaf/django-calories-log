@@ -6,6 +6,7 @@
 .food-amount-field {
   width: 50px;
   padding: 1px 2px;
+  text-align: right;
 }
 
 #id_found_food_table_container table tr td,
@@ -17,6 +18,7 @@
   height: auto;
   border-radius: 0px;
   border: 1px solid #ccc;
+  float: right;
 }
 
 td.righted {

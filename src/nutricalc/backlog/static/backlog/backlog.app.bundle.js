@@ -542,6 +542,7 @@
 	'use strict';
 
 	(function () {
+	    'use strict';
 
 	    var BacklogDispatcher = __webpack_require__(1);
 	    var TableComponents = __webpack_require__(10);
@@ -648,6 +649,7 @@
 	'use strict';
 
 	(function () {
+	    'use strict';
 
 	    var BacklogDispatcher = __webpack_require__(1);
 	    var Storage = __webpack_require__(8);
@@ -706,7 +708,9 @@
 	        },
 	        render: function render() {
 	            var value = this.state.value;
-	            return React.createElement('input', { type: 'text', className: 'form-control food-amount-field', value: value, onChange: this.handleTextFieldChange });
+	            return React.createElement('input', { type: 'text', className: 'form-control food-amount-field',
+	                value: value, onChange: this.handleTextFieldChange
+	            });
 	        }
 	    });
 
@@ -825,6 +829,8 @@
 	'use strict';
 
 	(function () {
+	    'use strict';
+
 	    var BacklogDispatcher = __webpack_require__(1);
 	    var TableComponents = __webpack_require__(10);
 	    var FoodAmountField = __webpack_require__(7);
@@ -910,6 +916,9 @@
 	"use strict";
 
 	(function () {
+	    // just react table components without any application meaning
+	    'use strict';
+
 	    module.exports = {};
 	    module.exports.Table = React.createClass({
 	        displayName: "Table",
@@ -920,7 +929,7 @@
 	                { className: "table-responsive" },
 	                React.createElement(
 	                    "table",
-	                    { className: "table  table-striped table-condensed" },
+	                    { className: "table table-striped table-condensed" },
 	                    this.props.children
 	                )
 	            );
@@ -970,7 +979,7 @@
 	            if (this.props.header) {
 	                return React.createElement(
 	                    "th",
-	                    null,
+	                    this.props,
 	                    this.props.value
 	                );
 	            }
@@ -1000,6 +1009,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	(function () {
+	    'use strict';
 
 	    var BacklogDispatcher = __webpack_require__(1);
 	    var TableComponents = __webpack_require__(10);
@@ -1059,7 +1069,7 @@
 	                        this.state.fat += this_fat;
 	                        this.state.carb += this_carb;
 	                        this.state.ccal += this_ccal;
-	                        this.state.mass = this_mass;
+	                        this.state.mass += this_amount;
 	                    }
 	                } catch (err) {
 	                    _didIteratorError = true;
@@ -1116,29 +1126,32 @@
 	        }, {
 	            key: 'render',
 	            value: function render() {
+	                this.prot_perc_readable = this.state.prot_perc + '%';
+	                this.fat_perc_readable = this.state.fat_perc + '%';
+	                this.carb_perc_readable = this.state.carb_perc + '%';
 	                return React.createElement(
 	                    TableComponents.TableHeader,
 	                    { className: 'stat-row' },
 	                    React.createElement(
 	                        TableComponents.TableRow,
 	                        null,
-	                        React.createElement(TableComponents.TableCell, { value: 'Итого:', className: 'righted bold' }),
+	                        React.createElement(TableComponents.TableCell, { value: 'Total:', className: 'righted bold' }),
 	                        React.createElement(TableComponents.TableCell, { value: '' }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.ccal) }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.prot) }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.fat) }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.carb) }),
-	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.mass) })
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold' })
 	                    ),
 	                    React.createElement(
 	                        TableComponents.TableRow,
 	                        null,
-	                        React.createElement(TableComponents.TableCell, { value: 'Проценты:', className: 'righted bold' }),
+	                        React.createElement(TableComponents.TableCell, { value: '', className: 'righted bold' }),
 	                        React.createElement(TableComponents.TableCell, { value: '' }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: '' }),
-	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.state.prot_perc }),
-	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.state.fat_perc }),
-	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.state.carb_perc }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.prot_perc_readable }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.fat_perc_readable }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.carb_perc_readable }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: '' })
 	                    )
 	                );

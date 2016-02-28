@@ -1,5 +1,5 @@
 (function (){
-
+    'use strict';
     var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
     var TableComponents = require('./base.table');
     var FoodAmountField = require('./food.amount-field');
@@ -44,7 +44,7 @@
         header: function() {
             return (<TableComponents.TableHeader>
                         <TableComponents.TableRow>
-                            <TableComponents.TableCell value="" header/> 
+                            <TableComponents.TableCell value="" header/>
                             <TableComponents.TableCell value="" header/>
                             <TableComponents.TableCell value="Ccal" header className='righted'/>
                             <TableComponents.TableCell value="Prot" header className='righted'/>

@@ -1,6 +1,12 @@
 """Quick and dirty importer of this database files. Text files with all needed data.
 Used to populate local DB for easy development and testing.
 
+Database can be downloaded from ndb.nal.usda.gov. Wikipedia uses it.
+
+There is probably some parsing quality problems, because I do not use ~ and ^ properly,
+and scale nutrients amount units (because currently I only need basic, which is in gramms).
+It's work for future to implement such things and test it.
+
 Turn of debug before import if it's too slow. Needs like 20 seconds.
 
 """

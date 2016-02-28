@@ -1,12 +1,14 @@
 (function (){
+  // just react table components without any application meaning
+  'use strict';
   module.exports = {}
   module.exports.Table = React.createClass({
       render: function() {
           return <div className="table-responsive">
-              <table className="table  table-striped table-condensed">
+              <table className="table table-striped table-condensed">
                 {this.props.children}
               </table>
-              </div>
+            </div>
       }
   });
    
@@ -37,7 +39,7 @@
   module.exports.TableCell = React.createClass({
       render: function() {
           if (this.props.header) {
-            return (<th>{this.props.value}
+            return (<th {...this.props}>{this.props.value}
                     </th>);
           }
           
