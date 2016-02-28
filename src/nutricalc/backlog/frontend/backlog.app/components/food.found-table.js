@@ -1,7 +1,7 @@
 (function (){
     var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
-    var TableComponents = require('./TableComponents');
-    var FoodAmountField = require('./FoodAmountField');
+    var TableComponents = require('./base.table');
+    var FoodAmountField = require('./food.amount-field');
 
     var FoundFoodTable = React.createClass({
         // FoundFoodTable

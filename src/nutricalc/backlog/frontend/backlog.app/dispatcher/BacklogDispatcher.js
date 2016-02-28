@@ -28,7 +28,17 @@
             action: 'foodAmountUpdated',
             food_id: food_id,
         });
-    }
+    };
+
+    BacklogDispatcher.handleError = function(errorResp) {
+        if (errorResp.status >= 400 && errorResp.status < 500) {
+            // user-defined error
+            alert("Error: " + errorResp.data.readable_message || errorResp.data || "Not specified");
+        } else {
+            // some server error...
+            console.log(errorResp)
+        }
+    };
 
     module.exports = BacklogDispatcher;
 })();

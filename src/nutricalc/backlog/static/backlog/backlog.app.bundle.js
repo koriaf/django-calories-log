@@ -54,7 +54,7 @@
 
 	    // load all top-level components
 	    var EatenFoodTable = __webpack_require__(6);
-	    var FoundFoodTable = __webpack_require__(11);
+	    var FoundFoodTable = __webpack_require__(9);
 
 	    ReactDOM.render(React.createElement(EatenFoodTable, null), document.querySelector("#id_eaten_food_table_container"));
 
@@ -63,14 +63,11 @@
 	    var Views = {
 	        doFoodSearch: function doFoodSearch() {
 	            var q = $("#id_food_search_input").val().trim();
-	            // fetch list of goods by AJAX from server side
-	            // TODO: make better API provider here
-
-	            // TODO: error handling!
-	            $.getJSON("/api/v1/products/", { title: q }, function success(resp) {
+	            // fetch list of goods by AJAX from server side using our API
+	            $.getJSON("/api/v1/products/", { title: q }).done(function success(resp) {
 	                // got product list. Update it
 	                BacklogDispatcher.renderFoundFood(resp);
-	            });
+	            }).error(BacklogDispatcher.handleError);
 	            return false;
 	        },
 	        setHandlers: function setHandlers() {
@@ -118,6 +115,16 @@
 	            action: 'foodAmountUpdated',
 	            food_id: food_id
 	        });
+	    };
+
+	    BacklogDispatcher.handleError = function (errorResp) {
+	        if (errorResp.status >= 400 && errorResp.status < 500) {
+	            // user-defined error
+	            alert("Error: " + errorResp.data.readable_message || errorResp.data || "Not specified");
+	        } else {
+	            // some server error...
+	            console.log(errorResp);
+	        }
 	    };
 
 	    module.exports = BacklogDispatcher;
@@ -537,10 +544,10 @@
 	(function () {
 
 	    var BacklogDispatcher = __webpack_require__(1);
-	    var TableComponents = __webpack_require__(7);
-	    var FoodAmountField = __webpack_require__(8);
-	    var StatRow = __webpack_require__(10);
-	    var Storage = __webpack_require__(9);
+	    var TableComponents = __webpack_require__(10);
+	    var FoodAmountField = __webpack_require__(7);
+	    var StatRow = __webpack_require__(11);
+	    var Storage = __webpack_require__(8);
 
 	    var EatenFoodTable = React.createClass({
 	        displayName: 'EatenFoodTable',
@@ -636,88 +643,6 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	(function () {
-	    module.exports = {};
-	    module.exports.Table = React.createClass({
-	        displayName: "Table",
-
-	        render: function render() {
-	            return React.createElement(
-	                "div",
-	                { className: "table-responsive" },
-	                React.createElement(
-	                    "table",
-	                    { className: "table  table-striped table-condensed" },
-	                    this.props.children
-	                )
-	            );
-	        }
-	    });
-
-	    module.exports.TableHeader = React.createClass({
-	        displayName: "TableHeader",
-
-	        render: function render() {
-	            return React.createElement(
-	                "thead",
-	                null,
-	                this.props.children
-	            );
-	        }
-	    });
-
-	    module.exports.TableBody = React.createClass({
-	        displayName: "TableBody",
-
-	        render: function render() {
-	            return React.createElement(
-	                "tbody",
-	                null,
-	                this.props.children
-	            );
-	        }
-	    });
-
-	    module.exports.TableRow = React.createClass({
-	        displayName: "TableRow",
-
-	        render: function render() {
-	            return React.createElement(
-	                "tr",
-	                null,
-	                this.props.children
-	            );
-	        }
-	    });
-
-	    module.exports.TableCell = React.createClass({
-	        displayName: "TableCell",
-
-	        render: function render() {
-	            if (this.props.header) {
-	                return React.createElement(
-	                    "th",
-	                    null,
-	                    this.props.value
-	                );
-	            }
-
-	            return React.createElement(
-	                "td",
-	                this.props,
-	                this.props.value,
-	                this.props.children
-	            );
-	        }
-	    });
-	})();
-
-/***/ },
-/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -725,7 +650,7 @@
 	(function () {
 
 	    var BacklogDispatcher = __webpack_require__(1);
-	    var Storage = __webpack_require__(9);
+	    var Storage = __webpack_require__(8);
 
 	    var FoodAmountField = React.createClass({
 	        displayName: 'FoodAmountField',
@@ -789,7 +714,7 @@
 	})();
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -894,7 +819,174 @@
 	})();
 
 /***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	(function () {
+	    var BacklogDispatcher = __webpack_require__(1);
+	    var TableComponents = __webpack_require__(10);
+	    var FoodAmountField = __webpack_require__(7);
+
+	    var FoundFoodTable = React.createClass({
+	        displayName: 'FoundFoodTable',
+
+	        // FoundFoodTable
+	        getInitialState: function getInitialState() {
+	            return {
+	                found_food: []
+	            };
+	        },
+
+	        componentDidMount: function componentDidMount() {
+	            var table = this;
+	            BacklogDispatcher.register(function (payload) {
+	                if (payload.action === 'renderFoundFood') {
+	                    table.setState({ found_food: payload.found_food });
+	                }
+	            });
+	        },
+
+	        header: function header() {
+	            return React.createElement(
+	                TableComponents.TableHeader,
+	                null,
+	                React.createElement(
+	                    TableComponents.TableRow,
+	                    null,
+	                    React.createElement(TableComponents.TableCell, { value: 'Title', header: true }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Unit', header: true }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true })
+	                )
+	            );
+	        },
+
+	        body: function body(items) {
+	            return React.createElement(
+	                TableComponents.TableBody,
+	                null,
+	                items.map(function (item) {
+	                    return React.createElement(
+	                        TableComponents.TableRow,
+	                        { key: item.id },
+	                        React.createElement(TableComponents.TableCell, { value: item.title, align: 'right' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.unit }),
+	                        React.createElement(TableComponents.TableCell, { value: item.ccal }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_prot }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_fat }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_carb }),
+	                        React.createElement(
+	                            TableComponents.TableCell,
+	                            { className: 'righted' },
+	                            React.createElement(FoodAmountField, { food_data: item })
+	                        )
+	                    );
+	                }, this)
+	            );
+	        },
+
+	        render: function render() {
+	            return React.createElement(
+	                TableComponents.Table,
+	                null,
+	                this.header(),
+	                this.body(this.state.found_food)
+	            );
+	        }
+	    });
+
+	    module.exports = FoundFoodTable;
+	})();
+
+/***/ },
 /* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	(function () {
+	    module.exports = {};
+	    module.exports.Table = React.createClass({
+	        displayName: "Table",
+
+	        render: function render() {
+	            return React.createElement(
+	                "div",
+	                { className: "table-responsive" },
+	                React.createElement(
+	                    "table",
+	                    { className: "table  table-striped table-condensed" },
+	                    this.props.children
+	                )
+	            );
+	        }
+	    });
+
+	    module.exports.TableHeader = React.createClass({
+	        displayName: "TableHeader",
+
+	        render: function render() {
+	            return React.createElement(
+	                "thead",
+	                null,
+	                this.props.children
+	            );
+	        }
+	    });
+
+	    module.exports.TableBody = React.createClass({
+	        displayName: "TableBody",
+
+	        render: function render() {
+	            return React.createElement(
+	                "tbody",
+	                null,
+	                this.props.children
+	            );
+	        }
+	    });
+
+	    module.exports.TableRow = React.createClass({
+	        displayName: "TableRow",
+
+	        render: function render() {
+	            return React.createElement(
+	                "tr",
+	                null,
+	                this.props.children
+	            );
+	        }
+	    });
+
+	    module.exports.TableCell = React.createClass({
+	        displayName: "TableCell",
+
+	        render: function render() {
+	            if (this.props.header) {
+	                return React.createElement(
+	                    "th",
+	                    null,
+	                    this.props.value
+	                );
+	            }
+
+	            return React.createElement(
+	                "td",
+	                this.props,
+	                this.props.value,
+	                this.props.children
+	            );
+	        }
+	    });
+	})();
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -910,8 +1002,8 @@
 	(function () {
 
 	    var BacklogDispatcher = __webpack_require__(1);
-	    var TableComponents = __webpack_require__(7);
-	    var Storage = __webpack_require__(9);
+	    var TableComponents = __webpack_require__(10);
+	    var Storage = __webpack_require__(8);
 
 	    var StatRow = function (_React$Component) {
 	        _inherits(StatRow, _React$Component);
@@ -1057,91 +1149,6 @@
 	    }(React.Component);
 
 	    module.exports = StatRow;
-	})();
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	(function () {
-	    var BacklogDispatcher = __webpack_require__(1);
-	    var TableComponents = __webpack_require__(7);
-	    var FoodAmountField = __webpack_require__(8);
-
-	    var FoundFoodTable = React.createClass({
-	        displayName: 'FoundFoodTable',
-
-	        // FoundFoodTable
-	        getInitialState: function getInitialState() {
-	            return {
-	                found_food: []
-	            };
-	        },
-
-	        componentDidMount: function componentDidMount() {
-	            var table = this;
-	            BacklogDispatcher.register(function (payload) {
-	                if (payload.action === 'renderFoundFood') {
-	                    table.setState({ found_food: payload.found_food });
-	                }
-	            });
-	        },
-
-	        header: function header() {
-	            return React.createElement(
-	                TableComponents.TableHeader,
-	                null,
-	                React.createElement(
-	                    TableComponents.TableRow,
-	                    null,
-	                    React.createElement(TableComponents.TableCell, { value: 'Title', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Unit', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true })
-	                )
-	            );
-	        },
-
-	        body: function body(items) {
-	            return React.createElement(
-	                TableComponents.TableBody,
-	                null,
-	                items.map(function (item) {
-	                    return React.createElement(
-	                        TableComponents.TableRow,
-	                        { key: item.id },
-	                        React.createElement(TableComponents.TableCell, { value: item.title, align: 'right' }),
-	                        React.createElement(TableComponents.TableCell, { value: item.unit }),
-	                        React.createElement(TableComponents.TableCell, { value: item.ccal }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_prot }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_fat }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_carb }),
-	                        React.createElement(
-	                            TableComponents.TableCell,
-	                            { className: 'righted' },
-	                            React.createElement(FoodAmountField, { food_data: item })
-	                        )
-	                    );
-	                }, this)
-	            );
-	        },
-
-	        render: function render() {
-	            return React.createElement(
-	                TableComponents.Table,
-	                null,
-	                this.header(),
-	                this.body(this.state.found_food)
-	            );
-	        }
-	    });
-
-	    module.exports = FoundFoodTable;
 	})();
 
 /***/ }

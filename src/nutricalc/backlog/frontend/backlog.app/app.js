@@ -4,8 +4,8 @@
     var BacklogDispatcher = require('./dispatcher/BacklogDispatcher');
 
     // load all top-level components
-    var EatenFoodTable = require('./components/EatenFoodTable');
-    var FoundFoodTable = require('./components/FoundFoodTable');
+    var EatenFoodTable = require('./components/food.eaten-table');
+    var FoundFoodTable = require('./components/food.found-table');
 
     ReactDOM.render(
         <EatenFoodTable />,
@@ -20,18 +20,14 @@
     var Views = {
         doFoodSearch: function doFoodSearch() {
             var q = $("#id_food_search_input").val().trim();
-            // fetch list of goods by AJAX from server side
-            // TODO: make better API provider here
-
-            // TODO: error handling!
+            // fetch list of goods by AJAX from server side using our API
             $.getJSON(
                 "/api/v1/products/",
-                {title: q},
-                function success(resp) {
+                {title: q}
+            ).done(function success(resp) {
                     // got product list. Update it
                     BacklogDispatcher.renderFoundFood(resp);
-                }
-            )
+            }).error(BacklogDispatcher.handleError);
             return false;
         },
         setHandlers: function setHandlers() {

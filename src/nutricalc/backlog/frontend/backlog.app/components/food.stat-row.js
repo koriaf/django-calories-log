@@ -1,7 +1,7 @@
 (function (){
 
     var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
-    var TableComponents = require('./TableComponents');
+    var TableComponents = require('./base.table');
     var Storage = require('../storage');
 
     class StatRow extends React.Component {
