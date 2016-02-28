@@ -609,6 +609,10 @@
 	                TableComponents.TableBody,
 	                null,
 	                items.map(function (food_row) {
+	                    food_row.ccal = food_row.ccal.toFixed(1);
+	                    food_row.nutr_prot = food_row.nutr_prot.toFixed(1);
+	                    food_row.nutr_fat = food_row.nutr_fat.toFixed(1);
+	                    food_row.nutr_carb = food_row.nutr_carb.toFixed(1);
 	                    return React.createElement(
 	                        TableComponents.TableRow,
 	                        { key: food_row.id },
@@ -849,6 +853,7 @@
 	            var table = this;
 	            BacklogDispatcher.register(function (payload) {
 	                if (payload.action === 'renderFoundFood') {
+	                    console.log(payload.found_food);
 	                    table.setState({ found_food: payload.found_food });
 	                }
 	            });
@@ -861,13 +866,13 @@
 	                React.createElement(
 	                    TableComponents.TableRow,
 	                    null,
-	                    React.createElement(TableComponents.TableCell, { value: 'Title', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Unit', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true })
+	                    React.createElement(TableComponents.TableCell, { value: 'Title', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Unit', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true, className: 'righted' })
 	                )
 	            );
 	        },
@@ -877,15 +882,19 @@
 	                TableComponents.TableBody,
 	                null,
 	                items.map(function (item) {
+	                    item.ccal = item.ccal.toFixed(1);
+	                    item.nutr_prot = item.nutr_prot.toFixed(1);
+	                    item.nutr_fat = item.nutr_fat.toFixed(1);
+	                    item.nutr_carb = item.nutr_carb.toFixed(1);
 	                    return React.createElement(
 	                        TableComponents.TableRow,
 	                        { key: item.id },
-	                        React.createElement(TableComponents.TableCell, { value: item.title, align: 'right' }),
-	                        React.createElement(TableComponents.TableCell, { value: item.unit }),
-	                        React.createElement(TableComponents.TableCell, { value: item.ccal }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_prot }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_fat }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_carb }),
+	                        React.createElement(TableComponents.TableCell, { value: item.title }),
+	                        React.createElement(TableComponents.TableCell, { value: item.unit, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.ccal, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_prot, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_fat, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_carb, className: 'righted' }),
 	                        React.createElement(
 	                            TableComponents.TableCell,
 	                            { className: 'righted' },

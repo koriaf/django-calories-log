@@ -17,6 +17,7 @@
             BacklogDispatcher.register(function(payload) {
                 if (payload.action === 'renderFoundFood')
                 {
+                    console.log(payload.found_food);
                     table.setState({found_food: payload.found_food})
                 }
             });
@@ -25,13 +26,13 @@
         header: function() {
             return (<TableComponents.TableHeader>
                         <TableComponents.TableRow>
-                            <TableComponents.TableCell value="Title" header/>
-                            <TableComponents.TableCell value="Unit" header/>
-                            <TableComponents.TableCell value="Ccal" header/>
-                            <TableComponents.TableCell value="Prot" header/>
-                            <TableComponents.TableCell value="Fat" header/>
-                            <TableComponents.TableCell value="Carb" header/>
-                            <TableComponents.TableCell value="Today" header/>
+                            <TableComponents.TableCell value="Title" header className='righted'/>
+                            <TableComponents.TableCell value="Unit" header className='righted'/>
+                            <TableComponents.TableCell value="Ccal" header className='righted'/>
+                            <TableComponents.TableCell value="Prot" header className='righted'/>
+                            <TableComponents.TableCell value="Fat" header className='righted'/>
+                            <TableComponents.TableCell value="Carb" header className='righted'/>
+                            <TableComponents.TableCell value="Today" header className='righted'/>
                         </TableComponents.TableRow>
                     </TableComponents.TableHeader>);
         },
@@ -39,14 +40,18 @@
         body: function(items) {
             return (<TableComponents.TableBody>
                       {items.map(function(item) {
+                        item.ccal = item.ccal.toFixed(1);
+                        item.nutr_prot = item.nutr_prot.toFixed(1);
+                        item.nutr_fat = item.nutr_fat.toFixed(1);
+                        item.nutr_carb = item.nutr_carb.toFixed(1);
                         return (
                           <TableComponents.TableRow key={item.id}>
-                            <TableComponents.TableCell value={item.title} align='right'/>
-                            <TableComponents.TableCell value={item.unit}/>
-                            <TableComponents.TableCell value={item.ccal}/>
-                            <TableComponents.TableCell value={item.nutr_prot}/>
-                            <TableComponents.TableCell value={item.nutr_fat}/>
-                            <TableComponents.TableCell value={item.nutr_carb}/>
+                            <TableComponents.TableCell value={item.title}/>
+                            <TableComponents.TableCell value={item.unit} className='righted'/>
+                            <TableComponents.TableCell value={item.ccal} className='righted'/>
+                            <TableComponents.TableCell value={item.nutr_prot} className='righted'/>
+                            <TableComponents.TableCell value={item.nutr_fat} className='righted'/>
+                            <TableComponents.TableCell value={item.nutr_carb} className='righted'/>
                             <TableComponents.TableCell className='righted'>
                                 <FoodAmountField food_data={item} />
                             </TableComponents.TableCell>
