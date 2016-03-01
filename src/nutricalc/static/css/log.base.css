@@ -21,7 +21,9 @@
   float: right;
 }
 
-td.righted {
+td.righted,
+th.righted,
+.righted {
   text-align: right;
 }
 

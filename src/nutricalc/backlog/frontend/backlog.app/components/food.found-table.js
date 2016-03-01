@@ -39,10 +39,18 @@
         body: function(items) {
             return (<TableComponents.TableBody>
                       {items.map(function(item) {
-                        item.ccal = item.ccal.toFixed(1);
-                        item.nutr_prot = item.nutr_prot.toFixed(1);
-                        item.nutr_fat = item.nutr_fat.toFixed(1);
-                        item.nutr_carb = item.nutr_carb.toFixed(1);
+                        if (item.ccal) {
+                            item.ccal = item.ccal.toFixed(1);
+                        }
+                        if (item.nutr_prot) {
+                            item.nutr_prot = item.nutr_prot.toFixed(1);
+                        }
+                        if (item.nutr_fat) {
+                            item.nutr_fat = item.nutr_fat.toFixed(1);
+                        }
+                        if (item.nutr_carb) {
+                            item.nutr_carb = item.nutr_carb.toFixed(1);
+                        }
                         return (
                           <TableComponents.TableRow key={item.id}>
                             <TableComponents.TableCell value={item.title}/>
