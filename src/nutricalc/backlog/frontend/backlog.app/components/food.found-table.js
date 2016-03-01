@@ -40,7 +40,7 @@
             return (<TableComponents.TableBody>
                       {items.map(function(item) {
                         if (item.ccal) {
-                            item.ccal = item.ccal.toFixed(1);
+                            item.ccal = item.ccal.toFixed(0);
                         }
                         if (item.nutr_prot) {
                             item.nutr_prot = item.nutr_prot.toFixed(1);

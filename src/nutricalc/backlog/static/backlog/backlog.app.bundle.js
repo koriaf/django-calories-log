@@ -595,11 +595,12 @@
 	                    null,
 	                    React.createElement(TableComponents.TableCell, { value: '', header: true }),
 	                    React.createElement(TableComponents.TableCell, { value: '', header: true }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Unit Ccal', header: true, className: 'righted' }),
 	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true, className: 'righted' }),
 	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true, className: 'righted' }),
 	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true, className: 'righted' })
+	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Total ccal', header: true, className: 'righted' })
 	                )
 	            );
 	        },
@@ -609,14 +610,25 @@
 	                TableComponents.TableBody,
 	                null,
 	                items.map(function (food_row) {
-	                    food_row.ccal = parseFloat(food_row.ccal).toFixed(1);
+	                    if (!food_row.ccal) {
+	                        food_row.ccal = 0;
+	                    }
+	                    food_row.ccal = parseFloat(food_row.ccal).toFixed(0) || '';
 	                    food_row.nutr_prot = parseFloat(food_row.nutr_prot).toFixed(1);
 	                    food_row.nutr_fat = parseFloat(food_row.nutr_fat).toFixed(1);
 	                    food_row.nutr_carb = parseFloat(food_row.nutr_carb).toFixed(1);
+
+	                    if (food_row.unit === '100gr') {
+	                        food_row.today_ccal = food_row.ccal / 100.0 * food_row.amount;
+	                        food_row.today_ccal = food_row.today_ccal.toFixed(1);
+	                    } else {
+	                        food_row.today_ccal = '?';
+	                    }
+
 	                    return React.createElement(
 	                        TableComponents.TableRow,
 	                        { key: food_row.id },
-	                        React.createElement(TableComponents.TableCell, { value: food_row.title, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: food_row.title }),
 	                        React.createElement(TableComponents.TableCell, { value: food_row.unit, className: 'righted' }),
 	                        React.createElement(TableComponents.TableCell, { value: food_row.ccal, className: 'righted' }),
 	                        React.createElement(TableComponents.TableCell, { value: food_row.nutr_prot, className: 'righted' }),
@@ -626,7 +638,8 @@
 	                            TableComponents.TableCell,
 	                            { className: 'righted' },
 	                            React.createElement(FoodAmountField, { food_data: food_row })
-	                        )
+	                        ),
+	                        React.createElement(TableComponents.TableCell, { value: food_row.today_ccal, className: 'righted' })
 	                    );
 	                }, this)
 	            );
@@ -1052,12 +1065,14 @@
 	                    React.createElement(
 	                        TableComponents.TableRow,
 	                        null,
-	                        React.createElement(TableComponents.TableCell, { value: 'Total:', className: 'righted bold' }),
+	                        React.createElement(TableComponents.TableCell, { value: 'Total:', className: 'bold' }),
 	                        React.createElement(TableComponents.TableCell, { value: '' }),
-	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.ccal) }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold' }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.prot) }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.fat) }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.carb) }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold' }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: Math.round(this.state.ccal) }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold' })
 	                    ),
 	                    React.createElement(
@@ -1069,6 +1084,8 @@
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.prot_perc_readable }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.fat_perc_readable }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: this.carb_perc_readable }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: '' }),
+	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: '' }),
 	                        React.createElement(TableComponents.TableCell, { className: 'righted bold', value: '' })
 	                    )
 	                );
@@ -1137,7 +1154,7 @@
 	                null,
 	                items.map(function (item) {
 	                    if (item.ccal) {
-	                        item.ccal = item.ccal.toFixed(1);
+	                        item.ccal = item.ccal.toFixed(0);
 	                    }
 	                    if (item.nutr_prot) {
 	                        item.nutr_prot = item.nutr_prot.toFixed(1);

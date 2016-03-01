@@ -88,12 +88,14 @@
             return(
                 <TableComponents.TableHeader className='stat-row'>
                     <TableComponents.TableRow>
-                        <TableComponents.TableCell value="Total:" className='righted bold'/>
+                        <TableComponents.TableCell value="Total:" className='bold'/>
                         <TableComponents.TableCell value=""/>
-                        <TableComponents.TableCell className='righted bold' value={Math.round(this.state.ccal)}/>
+                        <TableComponents.TableCell className='righted bold'/>
                         <TableComponents.TableCell className='righted bold' value={Math.round(this.state.prot)}/> 
                         <TableComponents.TableCell className='righted bold' value={Math.round(this.state.fat)}/>                                                                 
-                        <TableComponents.TableCell className='righted bold' value={Math.round(this.state.carb)}/> 
+                        <TableComponents.TableCell className='righted bold' value={Math.round(this.state.carb)}/>
+                        <TableComponents.TableCell className='righted bold'/>
+                        <TableComponents.TableCell className='righted bold' value={Math.round(this.state.ccal)}/>
                         <TableComponents.TableCell className='righted bold'/>
                     </TableComponents.TableRow>
                     <TableComponents.TableRow>
@@ -103,6 +105,8 @@
                         <TableComponents.TableCell className='righted bold' value={this.prot_perc_readable}/> 
                         <TableComponents.TableCell className='righted bold' value={this.fat_perc_readable}/>                                                                 
                         <TableComponents.TableCell className='righted bold' value={this.carb_perc_readable}/> 
+                        <TableComponents.TableCell className='righted bold' value=""/>
+                        <TableComponents.TableCell className='righted bold' value=""/>
                         <TableComponents.TableCell className='righted bold' value=""/>
                     </TableComponents.TableRow>
                 </TableComponents.TableHeader>

@@ -26,6 +26,7 @@ var/
 *.egg
 bower_components
 node_modules
+backlog.app.bundle.js
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

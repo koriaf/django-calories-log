@@ -46,11 +46,12 @@
                         <TableComponents.TableRow>
                             <TableComponents.TableCell value="" header/>
                             <TableComponents.TableCell value="" header/>
-                            <TableComponents.TableCell value="Ccal" header className='righted'/>
+                            <TableComponents.TableCell value="Unit Ccal" header className='righted'/>
                             <TableComponents.TableCell value="Prot" header className='righted'/>
                             <TableComponents.TableCell value="Fat" header className='righted'/>
                             <TableComponents.TableCell value="Carb" header className='righted'/>
                             <TableComponents.TableCell value="Today" header className='righted'/>
+                            <TableComponents.TableCell value="Total ccal" header className='righted'/>
                         </TableComponents.TableRow>
                     </TableComponents.TableHeader>);
         },
@@ -58,13 +59,24 @@
         body: function(items) {
             return (<TableComponents.TableBody>
                       {items.map(function(food_row) {
-                        food_row.ccal = parseFloat(food_row.ccal).toFixed(1);
+                        if (!food_row.ccal) {
+                            food_row.ccal = 0;
+                        }
+                        food_row.ccal = parseFloat(food_row.ccal).toFixed(0) || '';
                         food_row.nutr_prot = parseFloat(food_row.nutr_prot).toFixed(1);
                         food_row.nutr_fat = parseFloat(food_row.nutr_fat).toFixed(1);
                         food_row.nutr_carb = parseFloat(food_row.nutr_carb).toFixed(1);
+
+                        if (food_row.unit === '100gr') {
+                            food_row.today_ccal = food_row.ccal / 100.0 * food_row.amount;
+                            food_row.today_ccal = food_row.today_ccal.toFixed(1);
+                        } else {
+                            food_row.today_ccal = '?';
+                        }
+
                         return (
                           <TableComponents.TableRow key={food_row.id}>
-                            <TableComponents.TableCell value={food_row.title} className='righted'/>
+                            <TableComponents.TableCell value={food_row.title} />
                             <TableComponents.TableCell value={food_row.unit} className='righted'/>
                             <TableComponents.TableCell value={food_row.ccal} className='righted'/>
                             <TableComponents.TableCell value={food_row.nutr_prot} className='righted'/>
@@ -73,6 +85,7 @@
                             <TableComponents.TableCell className='righted'>
                                 <FoodAmountField food_data={food_row} />
                             </TableComponents.TableCell>
+                            <TableComponents.TableCell value={food_row.today_ccal} className='righted'/>
                           </TableComponents.TableRow>);
                       }, this)}
                     </TableComponents.TableBody>);
