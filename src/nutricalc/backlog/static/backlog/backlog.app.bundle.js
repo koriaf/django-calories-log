@@ -86,6 +86,8 @@
 	'use strict';
 
 	(function () {
+	    'use strict';
+
 	    var DispatcherClass = __webpack_require__(2).Dispatcher;
 
 	    var BacklogDispatcher = new DispatcherClass();
@@ -792,7 +794,7 @@
 	            field.reFetchValue();
 	            this._token1 = BacklogDispatcher.register(function (payload) {
 	                if (payload.action === 'foodAmountUpdated') {
-	                    if (field.food_data && payload.food_id == field.food_data.id) {
+	                    if (field.food_data && payload.food_id === field.food_data.id) {
 	                        field.reFetchValue();
 	                    }
 	                }
@@ -811,8 +813,8 @@
 	        render: function render() {
 	            var value = this.state.value;
 	            return React.createElement('input', { type: 'text', className: 'form-control food-amount-field',
-	                value: value, onChange: this.handleTextFieldChange
-	            });
+	                value: value,
+	                onChange: this.handleTextFieldChange });
 	        }
 	    });
 
@@ -830,12 +832,13 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	(function () {
+	    'use strict';
+
 	    var BacklogDispatcher = __webpack_require__(1);
 
 	    var StorageClass = function () {
 	        // class to work with local IndexedDB stored data.
 	        // handles events of food addition, update or deletion.
-	        // allow
 
 	        function StorageClass() {
 	            _classCallCheck(this, StorageClass);
@@ -880,7 +883,7 @@
 	                backlog_table.query().filter('id', food_data.id).execute().then(function (results) {
 	                    var added_food = null;
 	                    var update_promise = null;
-	                    if (results.length == 0) {
+	                    if (results.length === 0) {
 	                        // no food added yet
 	                        added_food = food_data;
 	                        added_food.amount = amount;
@@ -894,7 +897,7 @@
 	                            // remove food from db
 	                            update_promise = backlog_table.remove(added_food.id);
 	                        }
-	                    };
+	                    }
 	                    if (update_promise !== null) {
 	                        update_promise.then(function () {
 	                            BacklogDispatcher.foodAmountUpdated(food_data.id);
@@ -909,6 +912,7 @@
 
 	    var Storage = new StorageClass();
 
+	    // db - global package
 	    db.open({
 	        server: 'nutricalc.backlog',
 	        version: 1,

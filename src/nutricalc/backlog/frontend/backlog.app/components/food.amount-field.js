@@ -1,4 +1,4 @@
-(function (){
+(function () {
     'use strict';
     var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
     var Storage = require('../storage');
@@ -38,7 +38,7 @@
             this._token1 = BacklogDispatcher.register(function(payload) {
                 if (payload.action === 'foodAmountUpdated')
                 {
-                    if ((field.food_data) && (payload.food_id == field.food_data.id))
+                    if ((field.food_data) && (payload.food_id === field.food_data.id))
                     {
                         field.reFetchValue();
                     }
@@ -59,11 +59,11 @@
             var value = this.state.value;
             return (
                 <input type="text" className='form-control food-amount-field'
-                    value={value} onChange={this.handleTextFieldChange}
-                />
+                    value={value}
+                    onChange={this.handleTextFieldChange} />
             );
         }
     });
 
     module.exports = FoodAmountField;
-})();
+}());

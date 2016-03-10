@@ -18,6 +18,7 @@ class ProductReadonlyViewSet(ReadOnlyModelViewSet):
         q = self.request.GET.get('title', '').strip()
         if not q:
             return Product.objects.none()
+
         words = q.split()
         qs = Q(title__icontains="")
         for word in words:
@@ -28,4 +29,4 @@ class ProductReadonlyViewSet(ReadOnlyModelViewSet):
         qset = super(ProductReadonlyViewSet, self).get_queryset().filter(
             qs
         )
-        return qset
+        return qset[:200]

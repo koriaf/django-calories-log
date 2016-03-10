@@ -1,10 +1,10 @@
-(function (){
+(function () {
+    'use strict';
     var BacklogDispatcher = require('./dispatcher/BacklogDispatcher');
 
-    class StorageClass {
+    var StorageClass = class StorageClass {
         // class to work with local IndexedDB stored data.
         // handles events of food addition, update or deletion.
-        // allow 
         constructor() {
             this.server = null;
             this.addFood.bind(this);
@@ -31,7 +31,7 @@
 
         getAllStoredFood() {
             if (this.server) {
-                var backlog_table = this.server.backlog;
+                let backlog_table = this.server.backlog;
                 return backlog_table.query().filter().execute();
             } else {
                 return null;
@@ -42,14 +42,14 @@
             // updates amount of today food in database or creates such record in db
             // search, if food already added, and update amount
             // console.log("Adding/updating food ", food_data);
-            var backlog_table = this.server.backlog;
+            let backlog_table = this.server.backlog;
             backlog_table.query().filter(
                 'id',
                 food_data.id
             ).execute().then(function (results) {
                 var added_food = null;
                 var update_promise = null;
-                if (results.length == 0) {
+                if (results.length === 0) {
                     // no food added yet
                     added_food = food_data;
                     added_food.amount = amount;
@@ -63,24 +63,25 @@
                         // remove food from db
                         update_promise = backlog_table.remove(added_food.id);
                     }
-                };
+                }
                 if (update_promise !== null) {
-                    update_promise.then(function() {
+                    update_promise.then(function () {
                         BacklogDispatcher.foodAmountUpdated(food_data.id);
                     });
                 }
             });
         }
-    }
+    };
 
     var Storage = new StorageClass();
 
+    // db - global package
     db.open({
         server: 'nutricalc.backlog',
         version: 1,
         schema: {
             backlog: {
-                key: {keyPath: 'id', autoIncrement: true},
+                key: {keyPath: 'id', autoIncrement: true}
             }
         }
     }).then(function (s) {
@@ -89,4 +90,4 @@
 
     module.exports = Storage;
 
-})();
+}());

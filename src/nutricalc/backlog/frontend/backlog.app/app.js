@@ -25,8 +25,8 @@
                 "/api/v1/products/",
                 {title: q}
             ).done(function success(resp) {
-                    // got product list. Update it
-                    BacklogDispatcher.renderFoundFood(resp);
+                // got product list. Update it
+                BacklogDispatcher.renderFoundFood(resp);
             }).error(BacklogDispatcher.handleError);
             return false;
         },
