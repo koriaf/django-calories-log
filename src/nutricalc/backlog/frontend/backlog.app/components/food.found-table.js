@@ -37,6 +37,7 @@
         },
         
         body: function(items) {
+            // let sorted_items = items.sort((a, b) => a.title.split('').sort().join('') <= b.title.split('').sort().join(''));
             return (<TableComponents.TableBody>
                       {items.map(function(item) {
                         if (item.ccal) {

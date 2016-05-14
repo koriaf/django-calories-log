@@ -1,10 +1,12 @@
 (function (){
     'use strict';
-    var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
-    var TableComponents = require('./base.table');
-    var FoodAmountField = require('./food.amount-field');
-    var StatRow = require('./food.stat-row');
-    var Storage = require('../storage');
+    let BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
+    let TableComponents = require('./base.table');
+    let FoodAmountField = require('./food.amount-field');
+    let StatRow = require('./food.stat-row');
+    let Storage = require('../storage');
+    let sortBy = 'title';
+    let sortFunc = (a, b) => a[sortBy] >= b[sortBy];
 
     var EatenFoodTable = React.createClass({
         // EatenFoodTable
@@ -44,21 +46,32 @@
         header: function() {
             return (<TableComponents.TableHeader>
                         <TableComponents.TableRow>
-                            <TableComponents.TableCell value="" header/>
-                            <TableComponents.TableCell value="" header/>
-                            <TableComponents.TableCell value="Unit Ccal" header className='righted'/>
+                            <TableComponents.TableCell value="Title ↕" header onClick={this.changeSortOrder} data-sort-by='title'/>
+                            <TableComponents.TableCell value="Unit" header/>
+                            <TableComponents.TableCell value="Ccal ↕" header className='righted' onClick={this.changeSortOrder} data-sort-by='ccal'/>
                             <TableComponents.TableCell value="Prot" header className='righted'/>
                             <TableComponents.TableCell value="Fat" header className='righted'/>
                             <TableComponents.TableCell value="Carb" header className='righted'/>
-                            <TableComponents.TableCell value="Today" header className='righted'/>
+                            <TableComponents.TableCell value="Today ↕" header className='righted' onClick={this.changeSortOrder} data-sort-by='amount'/>
                             <TableComponents.TableCell value="Total ccal" header className='righted'/>
                         </TableComponents.TableRow>
                     </TableComponents.TableHeader>);
         },
+
+        changeSortOrder: function(dat) {
+            sortBy = dat.target.dataset.sortBy;
+            if ((sortBy === 'ccal') || (sortBy === 'amount')) {
+                sortFunc = (a, b) => parseInt(a[sortBy], 10) > parseInt(b[sortBy], 10);
+            } else {
+                sortFunc = (a, b) => a[sortBy] >= b[sortBy];
+            }
+            this.setState(this.state);
+        },
         
         body: function(items) {
+            let sorted_items = items.sort(sortFunc);
             return (<TableComponents.TableBody>
-                      {items.map(function(food_row) {
+                      {sorted_items.map(function(food_row) {
                         if (!food_row.ccal) {
                             food_row.ccal = 0;
                         }
