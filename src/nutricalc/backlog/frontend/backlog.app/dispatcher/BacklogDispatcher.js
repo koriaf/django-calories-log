@@ -37,6 +37,7 @@
             alert("Error: " + errorResp.data.readable_message || errorResp.data || "Not specified");
         } else {
             // some server error...
+            // we don't care about IE.
             console.log(errorResp);
         }
     };

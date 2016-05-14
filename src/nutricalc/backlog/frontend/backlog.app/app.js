@@ -1,4 +1,4 @@
-(function ($, window, document){
+(function (window, document){
     'use strict';
     // load dispatcher
     var BacklogDispatcher = require('./dispatcher/BacklogDispatcher');
@@ -18,24 +18,39 @@
     );
 
     var Views = {
+        serialize: function serialize(obj) {
+            // found on stackoverflow, no license supplied
+            return '?' + Object.keys(obj).reduce(
+                function(a,k){
+                    a.push(k+'='+encodeURIComponent(obj[k]));
+                    return a
+                },[]
+            ).join('&')
+        },
         doFoodSearch: function doFoodSearch() {
-            var q = $("#id_food_search_input").val().trim();
+            var q = document.querySelector("#id_food_search_input").value.trim();
             // fetch list of goods by AJAX from server side using our API
-            $.getJSON(
-                "/api/v1/products/",
-                {title: q}
-            ).done(function success(resp) {
+            let url = "/api/v1/products/" + Views.serialize({title: q});
+            window.fetch(
+                url
+            ).then(function(raw_resp) {
+                return raw_resp.json()
+            }).then(function success(resp_json) {
                 // got product list. Update it
-                BacklogDispatcher.renderFoundFood(resp);
-            }).error(BacklogDispatcher.handleError);
+                // TODO: check if output is sane
+                if (Object.prototype.toString.call(resp_json) === '[object Array]') {
+                    BacklogDispatcher.renderFoundFood(resp_json);
+                } else {
+                    throw "Error: Data from food API incorrect - not an array returned";
+                }
+            }).catch(BacklogDispatcher.handleError);
             return false;
         },
         setHandlers: function setHandlers() {
-            $("#id_food_search_button").bind('click', Views.doFoodSearch);
-            $("id_search_product_form").bind('submit', Views.doFoodSearch);
+            document.querySelector("#id_food_search_button").onclick = Views.doFoodSearch;
+            document.querySelector("#id_search_product_form").onsubmit = Views.doFoodSearch;
         }
     };
 
-    $(document).ready(Views.setHandlers);
-
-})(window.jQuery, window, document);
+    document.addEventListener("DOMContentLoaded", Views.setHandlers);
+})(window, document);
