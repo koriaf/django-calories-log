@@ -1,9 +1,9 @@
 # Base packages
-Django
+Django==1.9.6
 pytz
 
 # database
-psycopg2
+psycopg2==2.6.1
 
 # nice forms with bootstrap support
 # django-crispy-forms
@@ -15,12 +15,12 @@ psycopg2
 # send exceptions to Sentry
 # raven
 
-jsonfield
+jsonfield==1.0.3
 
 # work with remote API
 # requests
 # lxml
 
 # search API
-djangorestframework
-django-rest-swagger
+djangorestframework==3.3.3
+django-rest-swagger==0.3.6

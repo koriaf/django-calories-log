@@ -1,11 +1,13 @@
 # django-calories-log
-Simple app for having your own nutrition diary.
+Simple app for having your own nutrition diary. Works only in modern browsers (FF, Chrome)
 
 ## Why do it?
 
 Because I hate all existing ones. They are too complex, too slow and too unpleasant for me. I failed to find anything suits my needs for 100%.
 
-![Image of Yaktocat](docs/backlog.screenshot.png)
+And because I want to try React and unidirectional data flow model. And just practicize with JavaScript and try some new stuff.
+
+![Screenshot](docs/backlog.screenshot.png)
 
 ## Developers howto
 
