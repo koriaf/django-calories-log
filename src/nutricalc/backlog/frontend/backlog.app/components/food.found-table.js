@@ -15,7 +15,7 @@
         componentDidMount: function() {
             var table = this;
             BacklogDispatcher.register(function(payload) {
-                if (payload.action === 'renderFoundFood')
+                if (payload.action === BacklogDispatcher.appSymbols.renderFoundFood)
                 {
                     table.setState({found_food: payload.found_food})
                 }

@@ -10,6 +10,7 @@
             this.server = null;
             this.addFood.bind(this);
             this.saveForYesterday.bind(this);
+            this.getHistoricalData.bind(this);
 
             var storage = this;
 
@@ -130,6 +131,13 @@
                 }).catch(console.log.bind(this));
 
             }).catch(console.log.bind(console));
+        }
+
+        getHistoricalData() {
+            /* Return promise, which resolved provides all historical data for this user
+            */
+            let historyTable = this.server.historicalData;
+            return historyTable.query().filter().execute();
         }
     };
 

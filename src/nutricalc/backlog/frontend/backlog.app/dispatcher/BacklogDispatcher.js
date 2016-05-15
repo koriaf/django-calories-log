@@ -10,7 +10,7 @@
         // receives list of food items (from ajax request)
         // allows FoundFoodTable to be repainted
         this.dispatch({
-            action: 'renderFoundFood',
+            action: BacklogDispatcher.appSymbols.renderFoundFood,
             found_food: food_data
         });
     };

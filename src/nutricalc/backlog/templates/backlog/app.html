@@ -12,6 +12,10 @@
     <script src="{% static 'backlog/backlog.app.bundle.js' %}"></script>
 {% endblock %}
 
+{% block extra_css %}
+    <link href="{% static 'css/graph.base.css' %}" rel='stylesheet' />
+{% endblock %}
+
 {% block body %}
     <div id='log-app-container'>
         <div class='row'>
@@ -30,6 +34,12 @@
                 <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' id='id_found_food_table_container'>
                     Found products list is loading...
                 </div>
+
+                <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+                    <div id='id_historical_data_graph' style='display: block; background-color: white;'></div>
+                    <br style='clear: both' />
+                </div>
+
             </div>
 
             <div class='col-lg-6 col-md-6 col-sm-12 col-xs-12'>

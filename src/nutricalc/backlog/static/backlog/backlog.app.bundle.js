@@ -53,14 +53,17 @@
 	    var BacklogDispatcher = __webpack_require__(1);
 
 	    // load all top-level components
-	    var EatenFoodTable = __webpack_require__(6);
-	    var FoundFoodTable = __webpack_require__(7);
+	    var EatenFoodTable = __webpack_require__(7);
+	    var FoundFoodTable = __webpack_require__(12);
+	    var HistoricalDataGraph = __webpack_require__(13);
 
-	    var appSymbols = __webpack_require__(12);
+	    var appSymbols = __webpack_require__(6);
 
 	    ReactDOM.render(React.createElement(EatenFoodTable, null), document.querySelector("#id_eaten_food_table_container"));
 
 	    ReactDOM.render(React.createElement(FoundFoodTable, null), document.querySelector("#id_found_food_table_container"));
+
+	    ReactDOM.render(React.createElement(HistoricalDataGraph, null), document.querySelector("#id_historical_data_graph"));
 
 	    var Views = {
 	        serialize: function serialize(obj) {
@@ -99,7 +102,6 @@
 	            document.querySelector("#id_search_product_form").onsubmit = Views.doFoodSearch;
 	            // TODO: accessibility stuff and mobile check
 	            document.querySelector("#id_save_for_yesterday").onclick = Views.doSaveForYesterday;
-	            BacklogDispatcher.historicalDataUpdated();
 	        }
 	    };
 
@@ -119,13 +121,13 @@
 
 	    var BacklogDispatcher = new DispatcherClass();
 
-	    BacklogDispatcher.appSymbols = __webpack_require__(12);
+	    BacklogDispatcher.appSymbols = __webpack_require__(6);
 
 	    BacklogDispatcher.renderFoundFood = function (food_data) {
 	        // receives list of food items (from ajax request)
 	        // allows FoundFoodTable to be repainted
 	        this.dispatch({
-	            action: 'renderFoundFood',
+	            action: BacklogDispatcher.appSymbols.renderFoundFood,
 	            found_food: food_data
 	        });
 	    };
@@ -581,6 +583,25 @@
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	(function () {
+	    'use strict';
+
+	    var appSymbols = {
+	        updateFoodAmount: Symbol(),
+	        foodAmountUpdated: Symbol(),
+	        saveForYesterdayInitiated: Symbol(),
+	        historicalDataUpdated: Symbol(),
+	        renderFoundFood: Symbol()
+	    };
+	    module.exports = appSymbols;
+	})();
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -628,7 +649,7 @@
 	            this.reFetchFood();
 	            var table = this;
 	            BacklogDispatcher.register(function (payload) {
-	                if (payload.action === 'foodAmountUpdated') {
+	                if (payload.action === BacklogDispatcher.appSymbols.foodAmountUpdated) {
 	                    table.reFetchFood();
 	                }
 	            });
@@ -720,106 +741,6 @@
 	    });
 
 	    module.exports = EatenFoodTable;
-	})();
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	(function () {
-	    'use strict';
-
-	    var BacklogDispatcher = __webpack_require__(1);
-	    var TableComponents = __webpack_require__(8);
-	    var FoodAmountField = __webpack_require__(9);
-
-	    var FoundFoodTable = React.createClass({
-	        displayName: 'FoundFoodTable',
-
-	        // FoundFoodTable
-	        getInitialState: function getInitialState() {
-	            return {
-	                found_food: []
-	            };
-	        },
-
-	        componentDidMount: function componentDidMount() {
-	            var table = this;
-	            BacklogDispatcher.register(function (payload) {
-	                if (payload.action === 'renderFoundFood') {
-	                    table.setState({ found_food: payload.found_food });
-	                }
-	            });
-	        },
-
-	        header: function header() {
-	            return React.createElement(
-	                TableComponents.TableHeader,
-	                null,
-	                React.createElement(
-	                    TableComponents.TableRow,
-	                    null,
-	                    React.createElement(TableComponents.TableCell, { value: 'Title', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Unit', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true, className: 'righted' }),
-	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true, className: 'righted' })
-	                )
-	            );
-	        },
-
-	        body: function body(items) {
-	            // let sorted_items = items.sort((a, b) => a.title.split('').sort().join('') <= b.title.split('').sort().join(''));
-	            return React.createElement(
-	                TableComponents.TableBody,
-	                null,
-	                items.map(function (item) {
-	                    if (item.ccal) {
-	                        item.ccal = item.ccal.toFixed(0);
-	                    }
-	                    if (item.nutr_prot) {
-	                        item.nutr_prot = item.nutr_prot.toFixed(1);
-	                    }
-	                    if (item.nutr_fat) {
-	                        item.nutr_fat = item.nutr_fat.toFixed(1);
-	                    }
-	                    if (item.nutr_carb) {
-	                        item.nutr_carb = item.nutr_carb.toFixed(1);
-	                    }
-	                    return React.createElement(
-	                        TableComponents.TableRow,
-	                        { key: item.id },
-	                        React.createElement(TableComponents.TableCell, { value: item.title }),
-	                        React.createElement(TableComponents.TableCell, { value: item.unit, className: 'righted' }),
-	                        React.createElement(TableComponents.TableCell, { value: item.ccal, className: 'righted' }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_prot, className: 'righted' }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_fat, className: 'righted' }),
-	                        React.createElement(TableComponents.TableCell, { value: item.nutr_carb, className: 'righted' }),
-	                        React.createElement(
-	                            TableComponents.TableCell,
-	                            { className: 'righted' },
-	                            React.createElement(FoodAmountField, { food_data: item })
-	                        )
-	                    );
-	                }, this)
-	            );
-	        },
-
-	        render: function render() {
-	            return React.createElement(
-	                TableComponents.Table,
-	                null,
-	                this.header(),
-	                this.body(this.state.found_food)
-	            );
-	        }
-	    });
-
-	    module.exports = FoundFoodTable;
 	})();
 
 /***/ },
@@ -954,7 +875,7 @@
 	            var field = this;
 	            field.reFetchValue();
 	            this._token1 = BacklogDispatcher.register(function (payload) {
-	                if (payload.action === 'foodAmountUpdated') {
+	                if (payload.action === BacklogDispatcher.appSymbols.foodAmountUpdated) {
 	                    if (field.food_data && payload.food_id === field.food_data.id) {
 	                        field.reFetchValue();
 	                    }
@@ -996,7 +917,7 @@
 	    'use strict';
 
 	    var BacklogDispatcher = __webpack_require__(1);
-	    var appSymbols = __webpack_require__(12);
+	    var appSymbols = __webpack_require__(6);
 
 	    var StorageClass = function () {
 	        // class to work with local IndexedDB stored data.
@@ -1008,6 +929,7 @@
 	            this.server = null;
 	            this.addFood.bind(this);
 	            this.saveForYesterday.bind(this);
+	            this.getHistoricalData.bind(this);
 
 	            var storage = this;
 
@@ -1126,6 +1048,14 @@
 	                        return;
 	                    }).catch(console.log.bind(this));
 	                }).catch(console.log.bind(console));
+	            }
+	        }, {
+	            key: 'getHistoricalData',
+	            value: function getHistoricalData() {
+	                /* Return promise, which resolved provides all historical data for this user
+	                */
+	                var historyTable = this.server.historicalData;
+	                return historyTable.query().filter().execute();
 	            }
 	        }]);
 
@@ -1276,7 +1206,7 @@
 	                this.reFetchFood();
 	                var statrow = this;
 	                BacklogDispatcher.register(function (payload) {
-	                    if (payload.action === 'foodAmountUpdated') {
+	                    if (payload.action === BacklogDispatcher.appSymbols.foodAmountUpdated) {
 	                        statrow.reFetchFood();
 	                    }
 	                });
@@ -1328,20 +1258,258 @@
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	(function () {
 	    'use strict';
 
-	    var appConstants = {
-	        updateFoodAmount: Symbol(),
-	        foodAmountUpdated: Symbol(),
-	        saveForYesterdayInitiated: Symbol(),
-	        historicalDataUpdated: Symbol()
-	    };
-	    module.exports = appConstants;
+	    var BacklogDispatcher = __webpack_require__(1);
+	    var TableComponents = __webpack_require__(8);
+	    var FoodAmountField = __webpack_require__(9);
+
+	    var FoundFoodTable = React.createClass({
+	        displayName: 'FoundFoodTable',
+
+	        // FoundFoodTable
+	        getInitialState: function getInitialState() {
+	            return {
+	                found_food: []
+	            };
+	        },
+
+	        componentDidMount: function componentDidMount() {
+	            var table = this;
+	            BacklogDispatcher.register(function (payload) {
+	                if (payload.action === BacklogDispatcher.appSymbols.renderFoundFood) {
+	                    table.setState({ found_food: payload.found_food });
+	                }
+	            });
+	        },
+
+	        header: function header() {
+	            return React.createElement(
+	                TableComponents.TableHeader,
+	                null,
+	                React.createElement(
+	                    TableComponents.TableRow,
+	                    null,
+	                    React.createElement(TableComponents.TableCell, { value: 'Title', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Unit', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Ccal', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Prot', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Fat', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Carb', header: true, className: 'righted' }),
+	                    React.createElement(TableComponents.TableCell, { value: 'Today', header: true, className: 'righted' })
+	                )
+	            );
+	        },
+
+	        body: function body(items) {
+	            // let sorted_items = items.sort((a, b) => a.title.split('').sort().join('') <= b.title.split('').sort().join(''));
+	            return React.createElement(
+	                TableComponents.TableBody,
+	                null,
+	                items.map(function (item) {
+	                    if (item.ccal) {
+	                        item.ccal = item.ccal.toFixed(0);
+	                    }
+	                    if (item.nutr_prot) {
+	                        item.nutr_prot = item.nutr_prot.toFixed(1);
+	                    }
+	                    if (item.nutr_fat) {
+	                        item.nutr_fat = item.nutr_fat.toFixed(1);
+	                    }
+	                    if (item.nutr_carb) {
+	                        item.nutr_carb = item.nutr_carb.toFixed(1);
+	                    }
+	                    return React.createElement(
+	                        TableComponents.TableRow,
+	                        { key: item.id },
+	                        React.createElement(TableComponents.TableCell, { value: item.title }),
+	                        React.createElement(TableComponents.TableCell, { value: item.unit, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.ccal, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_prot, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_fat, className: 'righted' }),
+	                        React.createElement(TableComponents.TableCell, { value: item.nutr_carb, className: 'righted' }),
+	                        React.createElement(
+	                            TableComponents.TableCell,
+	                            { className: 'righted' },
+	                            React.createElement(FoodAmountField, { food_data: item })
+	                        )
+	                    );
+	                }, this)
+	            );
+	        },
+
+	        render: function render() {
+	            return React.createElement(
+	                TableComponents.Table,
+	                null,
+	                this.header(),
+	                this.body(this.state.found_food)
+	            );
+	        }
+	    });
+
+	    module.exports = FoundFoodTable;
+	})();
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	(function () {
+	    /* Renders simple graph about last 10 days nutrition.
+	    It's ugly prototype, I'll refactor it later, when I know what do I want here...
+	    // chuckchanedizainer
+	     */
+	    'use strict';
+
+	    var BacklogDispatcher = __webpack_require__(1);
+	    var Storage = __webpack_require__(10);
+
+	    var HistoricalDataGraph = function (_React$Component) {
+	        _inherits(HistoricalDataGraph, _React$Component);
+
+	        function HistoricalDataGraph(props) {
+	            _classCallCheck(this, HistoricalDataGraph);
+
+	            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HistoricalDataGraph).call(this, props));
+
+	            _this._resetState();
+	            _this.reFetchData.bind(_this);
+	            _this.render.bind(_this);
+	            _this._renderContainer.bind(_this);
+	            _this._renderRow.bind(_this);
+	            // BacklogDispatcher.historicalDataUpdated();
+	            // setTimeout('BacklogDispatcher.historicalDataUpdated();', 1000)
+	            function loadData() {
+	                if (Storage.server) {
+	                    BacklogDispatcher.historicalDataUpdated();
+	                } else {
+	                    setTimeout(loadData, 100);
+	                }
+	            }
+	            loadData();
+	            return _this;
+	        }
+
+	        _createClass(HistoricalDataGraph, [{
+	            key: '_resetState',
+	            value: function _resetState() {
+	                this.state = {
+	                    rows: []
+	                };
+	            }
+	        }, {
+	            key: 'componentDidMount',
+	            value: function componentDidMount() {
+	                var self = this;
+	                BacklogDispatcher.register(function (payload) {
+	                    if (payload.action === BacklogDispatcher.appSymbols.historicalDataUpdated) {
+	                        self.reFetchData();
+	                    }
+	                });
+	            }
+	        }, {
+	            key: 'reFetchData',
+	            value: function reFetchData() {
+	                var _this2 = this;
+
+	                Storage.getHistoricalData().then(function (historical_data) {
+	                    _this2.setState({ rows: historical_data });
+	                });
+	            }
+	        }, {
+	            key: 'render',
+	            value: function render() {
+	                return this._renderContainer(this.state.rows);
+	            }
+	        }, {
+	            key: '_renderContainer',
+	            value: function _renderContainer(rows) {
+	                rows.sort(function (a, b) {
+	                    return a['date'] >= b['date'];
+	                });
+	                rows = rows.slice(-10);
+	                return React.createElement(
+	                    'div',
+	                    { className: 'graph-container' },
+	                    rows.map(this._renderRow)
+	                );
+	            }
+	            ///
+
+	        }, {
+	            key: '_renderRow',
+	            value: function _renderRow(row) {
+	                var totalDayAmount = row.totals.prot + row.totals.carb + row.totals.fat;
+	                var scaleRatio = 0.5;
+	                var date = new Date(row.date);
+	                var dispProt = row.totals.prot * scaleRatio;
+	                var dispCarb = row.totals.carb * scaleRatio;
+	                var dispFat = row.totals.fat * scaleRatio;
+	                var protStyle = {
+	                    height: dispProt + 'px',
+	                    backgroundColor: '#99CC00'
+	                };
+	                var carbStyle = {
+	                    height: dispCarb + 'px',
+	                    backgroundColor: '#CCCC99'
+	                };
+	                var fatStyle = {
+	                    height: dispFat + 'px',
+	                    backgroundColor: '#FFFF00'
+	                };
+	                return React.createElement(
+	                    'div',
+	                    { className: 'graph-row' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'graph-item', style: protStyle },
+	                        'Prot ',
+	                        row.totals.prot
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'graph-item', style: carbStyle },
+	                        'Carb ',
+	                        row.totals.carb
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'graph-item', style: fatStyle },
+	                        'Fat ',
+	                        row.totals.fat
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'graph-label' },
+	                        date.toGMTString().slice(5, 11),
+	                        React.createElement('br', null),
+	                        row.totals.ccal,
+	                        ' ccal'
+	                    )
+	                );
+	            }
+	        }]);
+
+	        return HistoricalDataGraph;
+	    }(React.Component);
+
+	    module.exports = HistoricalDataGraph;
 	})();
 
 /***/ }

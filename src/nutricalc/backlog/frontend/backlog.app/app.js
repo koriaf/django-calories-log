@@ -6,6 +6,7 @@
     // load all top-level components
     var EatenFoodTable = require('./components/food.eaten-table');
     var FoundFoodTable = require('./components/food.found-table');
+    var HistoricalDataGraph = require('./components/historical-data-graph');
 
     var appSymbols = require('./symbols');
 
@@ -17,6 +18,11 @@
     ReactDOM.render(
         <FoundFoodTable />,
         document.querySelector("#id_found_food_table_container")
+    );
+
+    ReactDOM.render(
+        <HistoricalDataGraph />,
+        document.querySelector("#id_historical_data_graph")
     );
 
     var Views = {
@@ -60,7 +66,6 @@
             document.querySelector("#id_search_product_form").onsubmit = Views.doFoodSearch;
             // TODO: accessibility stuff and mobile check
             document.querySelector("#id_save_for_yesterday").onclick = Views.doSaveForYesterday;
-            BacklogDispatcher.historicalDataUpdated();
         }
     };
 

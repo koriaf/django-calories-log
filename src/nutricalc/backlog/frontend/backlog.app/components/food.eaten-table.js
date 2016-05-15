@@ -36,7 +36,7 @@
             this.reFetchFood();
             var table = this;
             BacklogDispatcher.register(function(payload) {
-                if (payload.action === 'foodAmountUpdated')
+                if (payload.action === BacklogDispatcher.appSymbols.foodAmountUpdated)
                 {
                     table.reFetchFood();
                 }

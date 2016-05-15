@@ -1,0 +1,19 @@
+.graph-row {
+    width: 70px;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+
+.graph-row .graph-item {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.graph-row .graph-label {
+    font-size: 90%;
+    text-align: center;
+    background-color: whitesmoke;
+    padding: 4px 0px;
+    border-top: 1px solid black;
+}

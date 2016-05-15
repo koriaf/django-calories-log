@@ -36,7 +36,7 @@
             var field = this;
             field.reFetchValue();
             this._token1 = BacklogDispatcher.register(function(payload) {
-                if (payload.action === 'foodAmountUpdated')
+                if (payload.action === BacklogDispatcher.appSymbols.foodAmountUpdated)
                 {
                     if ((field.food_data) && (payload.food_id === field.food_data.id))
                     {

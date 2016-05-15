@@ -1,10 +1,11 @@
 (function () {
     'use strict';
-    var appConstants = {
+    var appSymbols = {
         updateFoodAmount: Symbol(),
         foodAmountUpdated: Symbol(),
         saveForYesterdayInitiated: Symbol(),
         historicalDataUpdated: Symbol(),
+        renderFoundFood: Symbol(),
     };
-    module.exports = appConstants;
+    module.exports = appSymbols;
 }());
