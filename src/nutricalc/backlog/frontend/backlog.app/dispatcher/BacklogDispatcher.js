@@ -4,6 +4,8 @@
 
     var BacklogDispatcher = new DispatcherClass();
 
+    BacklogDispatcher.appSymbols = require('../symbols');
+
     BacklogDispatcher.renderFoundFood = function (food_data) {
         // receives list of food items (from ajax request)
         // allows FoundFoodTable to be repainted
@@ -18,7 +20,7 @@
         // allow store to save data and re-send new action foodAmountUpdated,
         // which will re-render all items
         this.dispatch({
-            action: 'updateFoodAmount',
+            action: BacklogDispatcher.appSymbols.updateFoodAmount,
             food_row: food_row
         });
     };
@@ -26,8 +28,20 @@
     BacklogDispatcher.foodAmountUpdated = function (food_id) {
         // trigger re-render all amount fields
         this.dispatch({
-            action: 'foodAmountUpdated',
+            action: BacklogDispatcher.appSymbols.foodAmountUpdated,
             food_id: food_id
+        });
+    };
+
+    BacklogDispatcher.saveForYesterday = function () {
+        this.dispatch({
+            action: BacklogDispatcher.appSymbols.saveForYesterdayInitiated,
+        });
+    };
+
+    BacklogDispatcher.historicalDataUpdated = function () {
+        this.dispatch({
+            action: BacklogDispatcher.appSymbols.historicalDataUpdated,
         });
     };
 

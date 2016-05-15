@@ -56,6 +56,8 @@
 	    var EatenFoodTable = __webpack_require__(6);
 	    var FoundFoodTable = __webpack_require__(7);
 
+	    var appSymbols = __webpack_require__(12);
+
 	    ReactDOM.render(React.createElement(EatenFoodTable, null), document.querySelector("#id_eaten_food_table_container"));
 
 	    ReactDOM.render(React.createElement(FoundFoodTable, null), document.querySelector("#id_found_food_table_container"));
@@ -85,9 +87,19 @@
 	            }).catch(BacklogDispatcher.handleError);
 	            return false;
 	        },
+	        doSaveForYesterday: function doSaveForYesterday() {
+	            /* Calculate current food totals (ccal, carb, prot, fat values)
+	            and save it to database for yesterday. Allow to draw table and graph
+	            of macronutrients in past and on weekly basis.
+	            */
+	            BacklogDispatcher.saveForYesterday();
+	            return false;
+	        },
 	        setHandlers: function setHandlers() {
-	            document.querySelector("#id_food_search_button").onclick = Views.doFoodSearch;
 	            document.querySelector("#id_search_product_form").onsubmit = Views.doFoodSearch;
+	            // TODO: accessibility stuff and mobile check
+	            document.querySelector("#id_save_for_yesterday").onclick = Views.doSaveForYesterday;
+	            BacklogDispatcher.historicalDataUpdated();
 	        }
 	    };
 
@@ -107,6 +119,8 @@
 
 	    var BacklogDispatcher = new DispatcherClass();
 
+	    BacklogDispatcher.appSymbols = __webpack_require__(12);
+
 	    BacklogDispatcher.renderFoundFood = function (food_data) {
 	        // receives list of food items (from ajax request)
 	        // allows FoundFoodTable to be repainted
@@ -121,7 +135,7 @@
 	        // allow store to save data and re-send new action foodAmountUpdated,
 	        // which will re-render all items
 	        this.dispatch({
-	            action: 'updateFoodAmount',
+	            action: BacklogDispatcher.appSymbols.updateFoodAmount,
 	            food_row: food_row
 	        });
 	    };
@@ -129,8 +143,20 @@
 	    BacklogDispatcher.foodAmountUpdated = function (food_id) {
 	        // trigger re-render all amount fields
 	        this.dispatch({
-	            action: 'foodAmountUpdated',
+	            action: BacklogDispatcher.appSymbols.foodAmountUpdated,
 	            food_id: food_id
+	        });
+	    };
+
+	    BacklogDispatcher.saveForYesterday = function () {
+	        this.dispatch({
+	            action: BacklogDispatcher.appSymbols.saveForYesterdayInitiated
+	        });
+	    };
+
+	    BacklogDispatcher.historicalDataUpdated = function () {
+	        this.dispatch({
+	            action: BacklogDispatcher.appSymbols.historicalDataUpdated
 	        });
 	    };
 
@@ -970,6 +996,7 @@
 	    'use strict';
 
 	    var BacklogDispatcher = __webpack_require__(1);
+	    var appSymbols = __webpack_require__(12);
 
 	    var StorageClass = function () {
 	        // class to work with local IndexedDB stored data.
@@ -980,13 +1007,19 @@
 
 	            this.server = null;
 	            this.addFood.bind(this);
+	            this.saveForYesterday.bind(this);
 
 	            var storage = this;
 
 	            BacklogDispatcher.register(function (payload) {
-	                if (payload.action === 'updateFoodAmount') {
-	                    // payload.food_row contains food_row with new updated amount
-	                    storage.addFood(payload.food_row, payload.food_row.amount);
+	                switch (payload.action) {
+	                    case BacklogDispatcher.appSymbols.updateFoodAmount:
+	                        // payload.food_row contains food_row with new updated amount
+	                        storage.addFood(payload.food_row, payload.food_row.amount);
+	                        break;
+	                    case BacklogDispatcher.appSymbols.saveForYesterdayInitiated:
+	                        storage.saveForYesterday();
+	                        break;
 	                }
 	            });
 	        }
@@ -1038,7 +1071,61 @@
 	                            BacklogDispatcher.foodAmountUpdated(food_data.id);
 	                        });
 	                    }
-	                });
+	                }).catch(console.log.bind(console));
+	            }
+	        }, {
+	            key: 'saveForYesterday',
+	            value: function saveForYesterday() {
+	                var self = this;
+	                self.getAllStoredFood().then(function (result) {
+	                    var totals = {
+	                        ccal: 0,
+	                        prot: 0,
+	                        carb: 0,
+	                        fat: 0
+	                    };
+	                    // Calculate totals values
+	                    result.forEach(function (product) {
+	                        var amount = parseFloat(product.amount);
+	                        var multiplier = product.unit == '100gr' ? 0.01 : 1;
+	                        var mass = multiplier * amount;
+
+	                        totals.ccal += product.ccal * mass;
+	                        totals.prot += product.nutr_prot * mass;
+	                        totals.carb += product.nutr_carb * mass;
+	                        totals.fat += product.nutr_fat * mass;
+	                    });
+	                    totals.ccal = Math.round(totals.ccal);
+	                    totals.prot = Math.round(totals.prot);
+	                    totals.carb = Math.round(totals.carb);
+	                    totals.fat = Math.round(totals.fat);
+	                    // save totals values with yesterday key
+	                    var yesterday = new Date();
+	                    yesterday.setDate(yesterday.getDate() - 1);
+	                    yesterday = yesterday.toISOString().slice(0, 10); // ugly
+
+	                    var historyTable = self.server.historicalData;
+	                    // show old data
+	                    historyTable.query().filter('date', yesterday).execute().then(function (old_records) {
+	                        var ret = null;
+	                        var newHistoryRecord = {
+	                            date: yesterday,
+	                            totals: totals
+	                        };
+	                        if (old_records.length == 0) {
+	                            ret = historyTable.add(newHistoryRecord);
+	                        } else {
+	                            newHistoryRecord = old_records[0];
+	                            newHistoryRecord.totals = totals;
+	                            ret = historyTable.update(newHistoryRecord);
+	                        }
+	                        return ret;
+	                    }).then(function () {
+	                        // data saved (or not), fire event about it;
+	                        BacklogDispatcher.historicalDataUpdated();
+	                        return;
+	                    }).catch(console.log.bind(this));
+	                }).catch(console.log.bind(console));
 	            }
 	        }]);
 
@@ -1050,9 +1137,12 @@
 	    // db - global package
 	    db.open({
 	        server: 'nutricalc.backlog',
-	        version: 1,
+	        version: 2,
 	        schema: {
 	            backlog: {
+	                key: { keyPath: 'id', autoIncrement: true }
+	            },
+	            historicalData: {
 	                key: { keyPath: 'id', autoIncrement: true }
 	            }
 	        }
@@ -1112,7 +1202,6 @@
 	        }, {
 	            key: '_processStat',
 	            value: function _processStat(food_data) {
-	                // console.log("Processing stat for " + this + " from " + food_data);
 	                this._resetState();
 	                var _iteratorNormalCompletion = true;
 	                var _didIteratorError = false;
@@ -1235,6 +1324,24 @@
 	    }(React.Component);
 
 	    module.exports = StatRow;
+	})();
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	(function () {
+	    'use strict';
+
+	    var appConstants = {
+	        updateFoodAmount: Symbol(),
+	        foodAmountUpdated: Symbol(),
+	        saveForYesterdayInitiated: Symbol(),
+	        historicalDataUpdated: Symbol()
+	    };
+	    module.exports = appConstants;
 	})();
 
 /***/ }

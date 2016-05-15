@@ -7,6 +7,8 @@
     var EatenFoodTable = require('./components/food.eaten-table');
     var FoundFoodTable = require('./components/food.found-table');
 
+    var appSymbols = require('./symbols');
+
     ReactDOM.render(
         <EatenFoodTable />,
         document.querySelector("#id_eaten_food_table_container")
@@ -46,9 +48,19 @@
             }).catch(BacklogDispatcher.handleError);
             return false;
         },
+        doSaveForYesterday: function doSaveForYesterday() {
+            /* Calculate current food totals (ccal, carb, prot, fat values)
+            and save it to database for yesterday. Allow to draw table and graph
+            of macronutrients in past and on weekly basis.
+            */
+            BacklogDispatcher.saveForYesterday()
+            return false;
+        },
         setHandlers: function setHandlers() {
-            document.querySelector("#id_food_search_button").onclick = Views.doFoodSearch;
             document.querySelector("#id_search_product_form").onsubmit = Views.doFoodSearch;
+            // TODO: accessibility stuff and mobile check
+            document.querySelector("#id_save_for_yesterday").onclick = Views.doSaveForYesterday;
+            BacklogDispatcher.historicalDataUpdated();
         }
     };
 

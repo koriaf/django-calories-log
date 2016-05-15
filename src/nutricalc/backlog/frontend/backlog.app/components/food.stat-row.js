@@ -23,7 +23,6 @@
         }
 
         _processStat(food_data) {
-            // console.log("Processing stat for " + this + " from " + food_data);
             this._resetState();
             for (let product of food_data) {
                 let this_amount = parseFloat(product.amount);
