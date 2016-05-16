@@ -1,11 +1,15 @@
 # django-calories-log
 Simple app for having your own nutrition diary. Works only in modern browsers (FF, Chrome)
 
+[![Code Climate](https://codeclimate.com/github/koriaf/django-calories-log/badges/gpa.svg)](https://codeclimate.com/github/koriaf/django-calories-log)
+
 ## Why do it?
 
 Because I hate all existing ones. They are too complex, too slow and too unpleasant for me. I failed to find anything suits my needs for 100%.
 
 And because I want to try React and unidirectional data flow model. And just practicize with JavaScript and try some new stuff.
+
+I am just playing with JS and React/flux so there are some ugly code and prototypes. I'll deal with it later. Now it just works and already fulfill my needs quite well. One problem - I wasn't able to find good free-licenced russian food database.
 
 ![Screenshot](docs/backlog.screenshot.png)
 
