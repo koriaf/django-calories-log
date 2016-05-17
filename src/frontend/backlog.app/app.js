@@ -10,6 +10,7 @@
 
     var appSymbols = require('./symbols');
 
+
     ReactDOM.render(
         <EatenFoodTable />,
         document.querySelector("#id_eaten_food_table_container")
