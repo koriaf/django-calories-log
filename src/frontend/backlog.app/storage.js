@@ -1,7 +1,7 @@
 (function () {
     'use strict';
-    let backlogStore = require('./backlog.store');
     var symbols = require('./symbols');
+    var backlogStore = require('./backlog.store');
 
     var StorageClass = class StorageClass {
         // class to work with local IndexedDB stored data.
@@ -15,8 +15,6 @@
             this.storeHistoricalData.bind(this);
             this.fetchHistoricalData.bind(this);
             this.fetchFoodFromBackend.bind(this);
-
-            var storage = this;
         }
 
         fetchFoodFromBackend() {
@@ -54,13 +52,14 @@
                     }
                 }
                 return update_promise;
-            }).catch(console.log.bind(console));
+            }).catch(error => console.log(error));
         }
 
         storeHistoricalData(productsToday) {
-            // Get today total values and save to indexedDB
+            // Calculates today total values and saves to indexedDB
             // so we can draw some graphs about how we eat
             // TODO: move process logic level up and here just store it
+
             var self = this;
             let totals = {
                 ccal: 0,
@@ -89,7 +88,7 @@
             
             let historyTable = self.server.historicalData;
             // show old data
-            historyTable.query().filter('date', yesterday).execute().then(function (old_records) {
+            historyTable.query().filter('date', yesterday).execute().then(old_records => {
                 let ret = null;
                 let newHistoryRecord = {
                     date: yesterday,
@@ -103,18 +102,18 @@
                     ret = historyTable.update(newHistoryRecord);
                 }
                 return ret;
-            }).then(function (){
+            }).then((result) => {
                 // data saved (or not)
                 // set current whole historical data to current state, where it can be
                 // accessed by graph components
                 self.fetchHistoricalData().then(graphData => {
-                    // backlogStore.dispatch({
-                    //     type: symbols.rHistoricalDataUpdated,
-                    //     newHistoricalData: graphData
-                    // })
+                    backlogStore.dispatch({
+                        type: symbols.rHistoricalDataUpdated,
+                        newHistoricalData: graphData
+                    })
                 });
                 return;
-            }).catch(console.log.bind(this));
+            }).catch(error => console.log(error));
         }
 
         fetchHistoricalData() {

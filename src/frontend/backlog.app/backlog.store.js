@@ -3,24 +3,37 @@ import { createStore, combineReducers } from 'redux';
 (function (){
     // todo: const funct
     let symbols = require('./symbols');
-    let dbStorage = require('./storage');
 
     const updateInitialState = () => {
-        function loadData() {
-            if (dbStorage.server) {
+        function loadBackendData() {
+            /* When application almost ready - dbStorage probably not.
+            It needs some milliseconds to initialize and start to return some data.
+            So, we just ask it every 100 msec for initialization fact, and, as
+            soon it's done - load all initial data from it.
+
+            In future we also may want to load it from the remote REST API
+
+            */
+            if (store.dbStorage.server) {
                 // if DB initialized already
-                dbStorage.fetchFoodFromBackend().then((allStoredFood) => {
+                store.dbStorage.fetchFoodFromBackend().then(allStoredFood => {
                     store.dispatch({
                         type: symbols.rProductStateReset,
                         newProductList: allStoredFood
                     })
-                });
+                })
+                store.dbStorage.fetchHistoricalData().then(historicalData => {
+                    store.dispatch({
+                        type: symbols.rHistoricalDataUpdated,
+                        newHistoricalData: historicalData
+                    })
+                })
             } else {
                 // try later
-                setTimeout(loadData, 100);
+                setTimeout(loadBackendData, 100);
             }
         }
-        loadData();
+        loadBackendData();
     }
 
     const todayFood = (state, action) => {
@@ -38,7 +51,7 @@ import { createStore, combineReducers } from 'redux';
                 if (action.product) {
                     // update in backend storage (IndexedDB currently), just for re-fetch after page reload
                     // we don't care about result, so, don't wait till promise resolve
-                    dbStorage.storeProductToBackend(action.product, action.newAmount);
+                    store.dbStorage.storeProductToBackend(action.product, action.newAmount);
                     
                     // update in state
                     let new_state = state.filter(p => p.id != action.product.id)
@@ -49,7 +62,7 @@ import { createStore, combineReducers } from 'redux';
                     )]
 
                     // save historical data
-                    dbStorage.storeHistoricalData(new_state);
+                    store.dbStorage.storeHistoricalData(new_state);
 
                     return new_state;
                 }
@@ -79,11 +92,11 @@ import { createStore, combineReducers } from 'redux';
     }
 
     const historicalData = (state = [], action) => {
-        if (action.type == symbols.rHistoricalDataSave) {
-            dbStorage.storeHistoricalData(action.newProducts);
-            return state;
-        } else if (action.type == symbols.rHistoricalDataUpdated) {
-            return action.newHistoricalData;
+        switch (action.type) {
+            case symbols.rHistoricalDataUpdated:
+                return action.newHistoricalData;
+            default:
+                return state;
         }
         return state;
     }

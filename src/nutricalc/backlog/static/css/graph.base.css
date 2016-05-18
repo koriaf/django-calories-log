@@ -5,9 +5,11 @@
     padding: 0px;
 }
 
+
 .graph-row .graph-item {
     text-align: center;
     vertical-align: middle;
+    width: 70px;
 }
 
 .graph-row .graph-label {

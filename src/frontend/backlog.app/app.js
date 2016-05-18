@@ -2,11 +2,13 @@
     'use strict';
     
     let backlogStore = require('./backlog.store');
+    let dbStorage = require('./storage');
+    backlogStore.dbStorage = dbStorage;
 
     // load all top-level components
     let EatenFoodTable = require('./components/food.eaten-table');
     let FoundFoodTable = require('./components/found.table.product.component');
-    let HistoricalDataGraph = require('./components/historical-data-graph');
+    let HistoricalDataGraph = require('./components/historical-data.graph');
 
     let symbols = require('./symbols');
 
