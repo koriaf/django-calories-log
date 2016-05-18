@@ -1,8 +1,8 @@
 (function (){
     'use strict';
     let TableComponents = require('./base.table');
-    let ProductRow = require('./row.product.component');
-    let backlogStore = require('../backlog.store');
+    let { ProductRow } = require('./product.row');
+    let { backlogStore } = require('../backlog.store');
     let symbols = require('../symbols');
 
     let FoundFoodTable = React.createClass({
@@ -47,5 +47,5 @@
         }
     });
 
-    module.exports = FoundFoodTable;
+    module.exports = { FoundFoodTable };
 })();

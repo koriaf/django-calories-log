@@ -1,8 +1,7 @@
 import { createStore, combineReducers } from 'redux';
 
 (function (){
-    // todo: const funct
-    let symbols = require('./symbols');
+    const symbols = require('./symbols');
 
     const updateInitialState = () => {
         function loadBackendData() {
@@ -14,16 +13,16 @@ import { createStore, combineReducers } from 'redux';
             In future we also may want to load it from the remote REST API
 
             */
-            if (store.dbStorage.server) {
+            if (backlogStore.dbStorage.server) {
                 // if DB initialized already
-                store.dbStorage.fetchFoodFromBackend().then(allStoredFood => {
-                    store.dispatch({
+                backlogStore.dbStorage.fetchFoodFromBackend().then(allStoredFood => {
+                    backlogStore.dispatch({
                         type: symbols.rProductStateReset,
                         newProductList: allStoredFood
                     })
                 })
-                store.dbStorage.fetchHistoricalData().then(historicalData => {
-                    store.dispatch({
+                backlogStore.dbStorage.fetchHistoricalData().then(historicalData => {
+                    backlogStore.dispatch({
                         type: symbols.rHistoricalDataUpdated,
                         newHistoricalData: historicalData
                     })
@@ -51,7 +50,7 @@ import { createStore, combineReducers } from 'redux';
                 if (action.product) {
                     // update in backend storage (IndexedDB currently), just for re-fetch after page reload
                     // we don't care about result, so, don't wait till promise resolve
-                    store.dbStorage.storeProductToBackend(action.product, action.newAmount);
+                    backlogStore.dbStorage.storeProductToBackend(action.product, action.newAmount);
                     
                     // update in state
                     let new_state = state.filter(p => p.id != action.product.id)
@@ -62,7 +61,7 @@ import { createStore, combineReducers } from 'redux';
                     )]
 
                     // save historical data
-                    store.dbStorage.storeHistoricalData(new_state);
+                    backlogStore.dbStorage.storeHistoricalData(new_state);
 
                     return new_state;
                 }
@@ -81,7 +80,7 @@ import { createStore, combineReducers } from 'redux';
         if (action.type === symbols.rProductSearchSuccess) {
             let todayProducts = {};
             // Is it fine to get state of store during different part of state update?
-            for (let prod of store.getState().todayFood) {
+            for (let prod of backlogStore.getState().todayFood) {
                 todayProducts[prod.id] = prod.amount
             }
             return action.productsFound.map(p => Object.assign({}, p, {
@@ -101,16 +100,11 @@ import { createStore, combineReducers } from 'redux';
         return state;
     }
 
-    let store = createStore(combineReducers({
+    let backlogStore = createStore(combineReducers({
         todayFood,
         foundFood,
         historicalData
     }))
 
-    // store.subscribe(() =>
-    //   console.log("Updated state:", store.getState())
-    // )
-
-    module.exports = store;
-
+    module.exports = { backlogStore };
 })();

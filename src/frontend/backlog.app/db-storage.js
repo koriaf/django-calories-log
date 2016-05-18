@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var symbols = require('./symbols');
-    var backlogStore = require('./backlog.store');
+    let { backlogStore } = require('./backlog.store');
 
     var StorageClass = class StorageClass {
         // class to work with local IndexedDB stored data.

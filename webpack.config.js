@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/frontend/backlog.app/app.js",
+    entry: "./src/frontend/backlog.app/backlog.app.js",
     output: {
         path: __dirname,
         filename: "./src/nutricalc/backlog/static/backlog/backlog.app.bundle.js"

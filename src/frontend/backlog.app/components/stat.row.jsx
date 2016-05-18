@@ -68,5 +68,5 @@
             </TableComponents.TableHeader>
         )
     };
-    module.exports = ProductStatRow;
+    module.exports = { ProductStatRow };
 })();

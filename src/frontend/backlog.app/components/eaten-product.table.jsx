@@ -1,10 +1,9 @@
 (function (){
     'use strict';
     let TableComponents = require('./base.table');
-    let ProductRow = require('./row.product.component');
-    let ProductStatRow = require('./stat-row.product.component');
-    let Storage = require('../storage');
-    var backlogStore = require('../backlog.store');
+    let { ProductRow  }= require('./product.row');
+    let { ProductStatRow } = require('./stat.row');
+    let { backlogStore } = require('../backlog.store');
     var symbols = require('../symbols');
 
     let sortBy = 'title';
@@ -88,6 +87,6 @@
         }
     });
 
-    module.exports = EatenFoodTable;
+    module.exports = { EatenFoodTable };
 
 })();

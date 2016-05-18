@@ -1,6 +1,6 @@
 (() => {
     let TableComponents = require('./base.table');
-    let ProductAmountField = require('./amount-field.product.component');
+    let { ProductAmountField } = require('./product-amount.field');
 
     const ProductRow = ({product, formatValues=false}) => {
         if (formatValues === true) {
@@ -32,5 +32,5 @@
             </TableComponents.TableRow>
         )
     };
-    module.exports = ProductRow;
+    module.exports = { ProductRow };
 })();

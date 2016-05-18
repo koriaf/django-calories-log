@@ -1,14 +1,14 @@
 (function (window, document){
     'use strict';
-    
-    let backlogStore = require('./backlog.store');
-    let dbStorage = require('./storage');
+    let { backlogStore } =  require('./backlog.store');
+    let dbStorage = require('./db-storage');
+
     backlogStore.dbStorage = dbStorage;
 
     // load all top-level components
-    let EatenFoodTable = require('./components/food.eaten-table');
-    let FoundFoodTable = require('./components/found.table.product.component');
-    let HistoricalDataGraph = require('./components/historical-data.graph');
+    let { EatenFoodTable } = require('./components/eaten-product.table');
+    let { FoundFoodTable } = require('./components/found-product.table');
+    let { HistoricalDataGraph } = require('./components/historical-data.graph');
 
     let symbols = require('./symbols');
 

@@ -5,8 +5,8 @@
 
     */
     'use strict';
-    var Storage = require('../storage');
-    let backlogStore = require('../backlog.store');
+    var Storage = require('../db-storage');
+    let { backlogStore } = require('../backlog.store');
     let symbols = require('../symbols');
 
     const HistoricalDataGraphDayItem = ({dayData}) => {
@@ -38,7 +38,7 @@
         );
     }
 
-    const HistoricalDataGraph = ({daysData}) => {
+    const HistoricalDataGraphBody = ({daysData}) => {
         daysData.sort((a, b) => a['date'] >= b['date']);
         daysData = daysData.slice(-10);
         return (
@@ -50,7 +50,7 @@
         )
     }
 
-    class HistoricalDataGraphContainer extends React.Component {
+    class HistoricalDataGraph extends React.Component {
         constructor(props) {
             super(props);
             this.state = {rows: []};
@@ -64,9 +64,9 @@
         }
 
         render() {
-            return <HistoricalDataGraph daysData={this.state.rows} />
+            return <HistoricalDataGraphBody daysData={this.state.rows} />
         }
     }
 
-    module.exports = HistoricalDataGraphContainer;
+    module.exports = { HistoricalDataGraph };
 })();
