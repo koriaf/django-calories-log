@@ -1,11 +1,11 @@
 (function () {
     'use strict';
     var appSymbols = {
-        updateFoodAmount: Symbol(),
-        foodAmountUpdated: Symbol(),
-        saveForYesterdayInitiated: Symbol(),
-        historicalDataUpdated: Symbol(),
-        renderFoundFood: Symbol(),
+        rProductUpdated: 'PRODUCT_UPDATED',
+        rProductStateReset: "PRODUCT_STATE_RESET",
+        rProductSearchSuccess: 'PRODUCT_SEARCH_SUCCESS',
+        rHistoricalDataSave: 'HISTORICAL_SAVE',
+        rHistoricalDataUpdated: 'HISTORICAL_UPDATED',
     };
     module.exports = appSymbols;
 }());

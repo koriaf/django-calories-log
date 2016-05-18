@@ -5,22 +5,28 @@
 
     */
     'use strict';
-    var BacklogDispatcher = require('../dispatcher/BacklogDispatcher');
     var Storage = require('../storage');
+    let backlogStore = require('../backlog.store');
+    let symbols = require('../symbols');
 
     class HistoricalDataGraph extends React.Component {
         constructor(props) {
             super(props);
             this._resetState()
-            this.reFetchData.bind(this);
             this.render.bind(this);
             this._renderContainer.bind(this);
             this._renderRow.bind(this);
-            // BacklogDispatcher.historicalDataUpdated();
-            // setTimeout('BacklogDispatcher.historicalDataUpdated();', 1000)
             function loadData() {
                 if (Storage.server) {
-                    BacklogDispatcher.historicalDataUpdated();
+                    // as soon server is available - fetch old historical data
+                    // from backend to set store state, allowing graph to
+                    // repaint
+                    Storage.fetchHistoricalData().then(historicalData => {
+                        backlogStore.dispatch({
+                            type: symbols.rHistoricalDataUpdated,
+                            newHistoricalData: historicalData
+                        })
+                    });
                 } else {
                     setTimeout(loadData, 100);
                 }
@@ -35,19 +41,11 @@
         }
 
         componentDidMount() {
-            let self = this;
-            BacklogDispatcher.register(function(payload) {
-                if (payload.action === BacklogDispatcher.appSymbols.historicalDataUpdated)
-                {
-                    self.reFetchData();
-                }
-            });
-        }
-
-        reFetchData() {
-            Storage.getHistoricalData().then(
-                historical_data => {this.setState({rows: historical_data})}
-            );
+            backlogStore.subscribe(() => {
+                // console.log("Historical Data Updated, repainting graphs...");
+                this.setState({rows: backlogStore.getState().historicalData})
+                // console.log(this.state);
+            })
         }
 
         render() {
@@ -87,7 +85,7 @@
                 <div className='graph-item' style={protStyle}>Prot {row.totals.prot}</div>
                 <div className='graph-item' style={carbStyle}>Carb {row.totals.carb}</div>
                 <div className='graph-item' style={fatStyle}>Fat {row.totals.fat}</div>
-                <div className='graph-label'>{date.toGMTString().slice(5, 11)}<br/>{row.totals.ccal} ccal</div>
+                <div className='graph-label' >{date.toGMTString().slice(5, 11)}<br/>{row.totals.ccal} ccal</div>
             </div>);
         }
     }
