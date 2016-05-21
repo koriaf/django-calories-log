@@ -29,4 +29,8 @@ class ProductReadonlyViewSet(ReadOnlyModelViewSet):
         qset = super(ProductReadonlyViewSet, self).get_queryset().filter(
             qs
         )
+        if not self.request.user.is_staff:
+            qset = qset.filter(
+                Q(is_public=True) | Q(user=self.request.user)
+            )
         return qset[:200]

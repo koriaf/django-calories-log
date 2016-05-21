@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from jsonfield import JSONField
 
 
@@ -22,6 +23,14 @@ class Product(models.Model):
     # product producer details
     producer = models.CharField(blank=True, null=True, max_length=255)
     barcode = models.CharField(blank=True, null=True, max_length=48)
+
+    # stuff
+    licence = models.CharField(max_length=100, default='unspecified')
+    is_public = models.BooleanField(default=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        blank=True, null=True
+    )
 
     class Meta:
         ordering = ('title',)

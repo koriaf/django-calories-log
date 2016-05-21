@@ -44,7 +44,8 @@
             // fetch list of goods by AJAX from server side using our API
             let url = "/api/v1/products/" + Views.serialize({title: q});
             window.fetch(
-                url
+                url,
+                { credentials: 'same-origin' }
             ).then(function(raw_resp) {
                 return raw_resp.json()
             }).then(function success(resp_json) {
