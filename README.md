@@ -44,3 +44,5 @@ Check out ./dev/ directory for some things to save time.
 ## Devops howto
 
 TODO: how to start project on some VPS or cloud service
+
+$ npm install

@@ -43,6 +43,16 @@
             var q = document.querySelector("#id_food_search_input").value.trim();
             // fetch list of goods by AJAX from server side using our API
             let url = "/api/v1/products/" + Views.serialize({title: q});
+            let errorBlock = document.querySelector("#id_found_food_table_message");
+            if (!q) {
+                errorBlock.innerText = '';
+                backlogStore.dispatch({
+                    type: symbols.rProductSearchSuccess,
+                    productsFound: []
+                })
+                return false;
+            }
+            errorBlock.innerHTML = '<img src="/static/images/ajax-loader.gif" />';
             window.fetch(
                 url,
                 { credentials: 'same-origin' }
@@ -57,16 +67,18 @@
                         productsFound: resp_json
                     })
                     if (resp_json.length > 0) {
-                        document.querySelector("#id_found_food_table_message").innerText = ""; 
+                        errorBlock.innerText = ""; 
                     } else {
-                        document.querySelector("#id_found_food_table_message").innerText = (
+                        errorBlock.innerText = (
                             `Sorry, nothing found for request "${q}"`
-                        )   
+                        )
                     }
                 } else {
                     throw "Error: Data from food API incorrect - not an array returned";
                 }
-            }).catch(window.console.log.bind(window.console));
+            }).catch(errorMessage => {
+                errorBlock.innerText = `Error: ${errorMessage}`;
+            });
             return false;
         },
         setHandlers: function setHandlers() {

@@ -6,9 +6,10 @@
 {% load static from staticfiles %}
 
 {% block extra_js %}
-    <script src="/static/bower_components/react/react.js"></script>
-    <script src="/static/bower_components/react/react-dom.js"></script>
-    <script src="/static/bower_components/db.js/src/db.js"></script>
+    <script src="{% static 'bower_components/react/react.js' %}"></script>
+    <script src="{% static 'bower_components/react/react-dom.js' %}"></script>
+    <script src="{% static 'bower_components/db.js/src/db.js' %}"></script>
+    <script src="{% static 'bower_components/fetch/fetch.js' %}"></script>
     <script src="{% static 'backlog/backlog.app.bundle.js' %}"></script>
 {% endblock %}
 

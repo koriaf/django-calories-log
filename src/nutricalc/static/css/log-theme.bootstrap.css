@@ -36,6 +36,12 @@ body > .container {
     margin: auto;
 }
 
+#id_found_food_table_message {
+  text-align: center;
+  margin-bottom: 10px;
+  min-height: 20px;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 

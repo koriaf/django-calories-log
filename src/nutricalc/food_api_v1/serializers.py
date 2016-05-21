@@ -10,5 +10,5 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'category', 'title', 'description', 'unit', 'language',
             'ccal', 'nutr_prot', 'nutr_carb', 'nutr_fat',
-            'source', 'extra_data',
+            'source', 'licence', 'extra_data',
         )

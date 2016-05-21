@@ -40,6 +40,9 @@
         },
         
         render: function() {
+            if (this.state.products.length == 0) {
+                return (<p></p>);
+            }
             return (<TableComponents.Table>
                       {this.header()} 
                       {this.body(this.state.products)}       

@@ -114,6 +114,7 @@ USE_L10N = False
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = env('NUTRICALC_STATIC_ROOT', default=None)
 
 SITE_ID = 1
 
@@ -128,3 +129,11 @@ ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
 ACCOUNT_PASSWORD_MIN_LENGTH = 3  # we never store any personal data anyway
 LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/'
+
+
+# Another way to do local settings: make local_settings.py file in same directly
+# and specify all your settings there.
+try:
+    from .local_settings import *  # NOQA
+except ImportError:
+    pass
