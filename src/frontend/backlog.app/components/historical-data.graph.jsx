@@ -9,9 +9,8 @@
     let { backlogStore } = require('../backlog.store');
     let symbols = require('../symbols');
 
-    const HistoricalDataGraphDayItem = ({dayData}) => {
+    const HistoricalDataGraphDayItem = ({dayData, scaleRatio}) => {
         let totalDayAmount = dayData.totals.prot + dayData.totals.carb + dayData.totals.fat;
-        let scaleRatio = 0.5;
         let date = new Date(dayData.date);
         let dispProt = dayData.totals.prot * scaleRatio;
         let dispCarb = dayData.totals.carb * scaleRatio;
@@ -39,12 +38,23 @@
     }
 
     const HistoricalDataGraphBody = ({daysData}) => {
+        let maxDayAmount = 0;
+        let scaleRatio = 1;
         daysData.sort((a, b) => a['date'] >= b['date']);
         daysData = daysData.slice(-10);
+        daysData.forEach(dayData => {
+            let thisDayAmount = dayData.totals.ccal;
+            maxDayAmount = Math.max(maxDayAmount, thisDayAmount);
+        });
+
+        let usualScaler = 0.4;
+        let typicalAmount = 3000;
+        scaleRatio = (typicalAmount / maxDayAmount) * usualScaler;
+
         return (
             <div className='graph-container'>
                 {daysData.map(dayData => {
-                    return <HistoricalDataGraphDayItem key={dayData.date} dayData={dayData} />
+                    return <HistoricalDataGraphDayItem key={dayData.date} dayData={dayData} scaleRatio={scaleRatio} />
                 })}
             </div>
         )

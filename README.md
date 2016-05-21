@@ -47,4 +47,4 @@ TODO: how to start project on some VPS or cloud service
 
     $ npm install
     # update settings - set STATIC_ROOT at least and postgresql database credentials
-    $ ./manage.sh collectstatic -i '*.map' -i src --noinput
+    $ ./manage.sh collectstatic -i '*.map' -i "*jquery/src*" --noinput 
