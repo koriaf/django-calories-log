@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # local apps
     'nutricalc',
@@ -54,6 +55,9 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'rest_framework_swagger',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -110,3 +114,17 @@ USE_L10N = False
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
+ACCOUNT_PASSWORD_MIN_LENGTH = 3  # we never store any personal data anyway
+LOGIN_URL = '/accounts/login'
+LOGIN_REDIRECT_URL = '/'

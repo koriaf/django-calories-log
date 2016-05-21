@@ -2,6 +2,9 @@
 Django==1.9.6
 pytz
 
+# fast and easy sign in and sign up implementation
+django-allauth==0.25.2
+
 # database
 psycopg2==2.6.1
 

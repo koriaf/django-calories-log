@@ -20,7 +20,10 @@ from django.views.generic import RedirectView, TemplateView
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/log/'), name='index'),
     url(r'^log/', include('nutricalc.backlog.urls')),
+
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('allauth.urls')),
+
     url(r'^api/v1/', include('nutricalc.food_api_v1.urls')),
     url(r'^api/v1/docs/', include('rest_framework_swagger.urls')),
 
