@@ -45,4 +45,6 @@ Check out ./dev/ directory for some things to save time.
 
 TODO: how to start project on some VPS or cloud service
 
-$ npm install
+    $ npm install
+    # update settings - set STATIC_ROOT at least and postgresql database credentials
+    $ ./manage.sh collectstatic -i '*.map' -i src --noinput
