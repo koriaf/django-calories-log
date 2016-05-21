@@ -1,5 +1,5 @@
 .graph-row {
-    width: 70px;
+    width: 10%;
     display: inline-block;
     margin: 0px;
     padding: 0px;
@@ -9,7 +9,7 @@
 .graph-row .graph-item {
     text-align: center;
     vertical-align: middle;
-    width: 70px;
+    width: 100%;
 }
 
 .graph-row .graph-label {
