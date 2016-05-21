@@ -30,7 +30,12 @@ class ProductReadonlyViewSet(ReadOnlyModelViewSet):
             qs
         )
         if not self.request.user.is_staff:
-            qset = qset.filter(
-                Q(is_public=True) | Q(user=self.request.user)
-            )
+            if self.request.user.is_authenticated():
+                qset = qset.filter(
+                    Q(is_public=True) | Q(user=self.request.user)
+                )
+            else:
+                qset = qset.filter(
+                    is_public=True
+                )
         return qset[:200]

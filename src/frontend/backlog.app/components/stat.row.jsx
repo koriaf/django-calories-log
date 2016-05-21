@@ -20,7 +20,6 @@
                 multiplier = 0.01;
             }
             let this_mass = multiplier * this_amount;
-
             let this_ccal = product.ccal * this_mass;
             let this_prot = product.nutr_prot * this_mass;
             let this_carb = product.nutr_carb * this_mass;
@@ -32,14 +31,19 @@
             totalRow.ccal += this_ccal;
             totalRow.mass += this_amount;
         }
+        let prot_perc_readable = 0;
+        let fat_perc_readable = 0;
+        let carb_perc_readable = 0;
         let total_nutr = totalRow.prot + totalRow.fat + totalRow.carb;
-        totalRow.prot_perc = Math.round(100 * totalRow.prot / total_nutr);
-        totalRow.fat_perc = Math.round(100 * totalRow.fat / total_nutr);
-        totalRow.carb_perc = Math.round(100 * totalRow.carb / total_nutr);
+        if (total_nutr > 0) {
+            totalRow.prot_perc = Math.round(100 * totalRow.prot / total_nutr);
+            totalRow.fat_perc = Math.round(100 * totalRow.fat / total_nutr);
+            totalRow.carb_perc = Math.round(100 * totalRow.carb / total_nutr);
 
-        totalRow.prot_perc_readable = `${totalRow.prot_perc}%`;
-        totalRow.fat_perc_readable = `${totalRow.fat_perc}%`;
-        totalRow.carb_perc_readable = `${totalRow.carb_perc}%`;
+            prot_perc_readable = `${totalRow.prot_perc}%`;
+            fat_perc_readable = `${totalRow.fat_perc}%`;
+            carb_perc_readable = `${totalRow.carb_perc}%`;
+        }
 
         return (
             <TableComponents.TableHeader className='stat-row'>
@@ -58,9 +62,9 @@
                     <TableComponents.TableCell value="" className='righted bold'/> 
                     <TableComponents.TableCell value=""/>
                     <TableComponents.TableCell className='righted bold' value=""/>
-                    <TableComponents.TableCell className='righted bold' value={totalRow.prot_perc_readable}/> 
-                    <TableComponents.TableCell className='righted bold' value={totalRow.fat_perc_readable}/>
-                    <TableComponents.TableCell className='righted bold' value={totalRow.carb_perc_readable}/> 
+                    <TableComponents.TableCell className='righted bold' value={prot_perc_readable}/> 
+                    <TableComponents.TableCell className='righted bold' value={fat_perc_readable}/>
+                    <TableComponents.TableCell className='righted bold' value={carb_perc_readable}/> 
                     <TableComponents.TableCell className='righted bold' value=""/>
                     <TableComponents.TableCell className='righted bold' value=""/>
                     <TableComponents.TableCell className='righted bold' value=""/>

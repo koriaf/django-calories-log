@@ -56,6 +56,13 @@
                         type: symbols.rProductSearchSuccess,
                         productsFound: resp_json
                     })
+                    if (resp_json.length > 0) {
+                        document.querySelector("#id_found_food_table_message").innerText = ""; 
+                    } else {
+                        document.querySelector("#id_found_food_table_message").innerText = (
+                            `Sorry, nothing found for request "${q}"`
+                        )   
+                    }
                 } else {
                     throw "Error: Data from food API incorrect - not an array returned";
                 }
