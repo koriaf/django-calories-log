@@ -1,5 +1,6 @@
 # django-calories-log
 Simple app for having your own nutrition diary. Works only in modern browsers (FF, Chrome)
+Demo: https://nutricalc.mooserv.org/
 
 [![Code Climate](https://codeclimate.com/github/koriaf/django-calories-log/badges/gpa.svg)](https://codeclimate.com/github/koriaf/django-calories-log)
 
